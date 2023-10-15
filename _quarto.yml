@@ -1,0 +1,29 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Météo"
+  
+  navbar:
+    tools: 
+      - icon: github
+        href: https://github.com/guibouland/ProjetGroupe
+        text: GitHub
+    left:
+      - href: index.qmd
+        text: Accueil
+      - about.qmd
+
+        
+            
+
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: false
+
+editor: visual
+
