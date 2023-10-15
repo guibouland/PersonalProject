@@ -1,9 +1,15 @@
 project:
   type: website
   output-dir: docs
+  render:
+    - index.qmd
+    - about.qmd
 
 website:
   title: "Météo"
+  page-navigation: true
+  repo-url: https://github.com/guibouland/ProjetGroupe
+  repo-actions: [source, issue]
   
   navbar:
     tools: 
@@ -12,8 +18,9 @@ website:
         text: GitHub
     left:
       - href: index.qmd
-        text: Accueil
-      - about.qmd
+        text: Home
+      - href: about.qmd
+        text: More
 
         
             
