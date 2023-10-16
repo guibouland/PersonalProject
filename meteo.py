@@ -19,7 +19,7 @@ if response.status_code == 200:
     wcodenow = data["current"]["weathercode"]
     # températures journalières
     tempmax = data["daily"]["temperature_2m_max"]
-    print(tempmax)
+    # print(tempmax)
     tempmin = data["daily"]["temperature_2m_min"]
 
 
