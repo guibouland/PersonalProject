@@ -5,3 +5,5 @@
 *.Rproj
 notes.txt
 /.quarto/
+mon_dataframe.csv
+dailydata.csv
