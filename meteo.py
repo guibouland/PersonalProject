@@ -8,7 +8,7 @@ import csv
 Daily data
 """
 # Obention de l'API daily
-url_daily = "https://api.open-meteo.com/v1/forecast?latitude=43.6109&longitude=3.8763&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_sum,precipitation_hours,precipitation_probability_max,windspeed_10m_max,windgusts_10m_max,winddirection_10m_dominant&timezone=Europe%2FLondon"
+url_daily = "https://api.open-meteo.com/v1/forecast?latitude=43.6109&longitude=3.8763&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_sum,precipitation_hours,precipitation_probability_max,winddirection_10m_dominant&timezone=Europe%2FLondon"
 response_daily = requests.get(url_daily)
 
 # Vérification requête
@@ -16,7 +16,7 @@ if response_daily.status_code == 200:
     data_daily = response_daily.json()
     # Création Dataframe daily
     df_daily = pd.DataFrame(data_daily)
-    print(df_daily.iloc[:, -1])
+    # print(df_daily.iloc[:, -1])
 
     pd.set_option("display.max_rows", None)
 
@@ -33,6 +33,7 @@ if response_daily.status_code == 200:
     precip_daily_sum = data_daily["daily"]["precipitation_sum"]
     precip_proba_daily = data_daily["daily"]["precipitation_probability_max"]
     precip_hours_daily = data_daily["daily"]["precipitation_hours"]
+    wind_direc_daily = data_daily["daily"]["winddirection_10m_dominant"]
 
 
 # %%
@@ -87,7 +88,7 @@ if response_hourly.status_code == 200:
 Current data
 """
 # Obtention API current data
-url_current = "https://api.open-meteo.com/v1/forecast?latitude=43.6109&longitude=3.8763&current=temperature_2m,precipitation,weathercode,windspeed_10m&timezone=Europe%2FLondon"
+url_current = "https://api.open-meteo.com/v1/forecast?latitude=43.6109&longitude=3.8763&current=temperature_2m,precipitation,weathercode,windspeed_10m,winddirection_10m&timezone=Europe%2FLondon"
 
 response_current = requests.get(url_current)
 
@@ -97,15 +98,19 @@ if response_current.status_code == 200:
 
     # Création dataframe current
     df_current = pd.DataFrame(data_current)
+    print(df_current.iloc[:, -1])
 
     # Création csv associé
     df_current.to_csv("df_current.csv", index=False)
 
-    # Extraction température hourly
+    # Extraction data current
+    date_now = data_current["current"]["time"][:10]
+    print(date_now)
     temp_now = data_current["current"]["temperature_2m"]
     precip_now = data_current["current"]["precipitation"]
     wmo_now = data_current["current"]["weathercode"]
     wind_now = data_current["current"]["windspeed_10m"]
+    wind_direc_now = data_current["current"]["winddirection_10m"]
 
 
 # %%
@@ -146,3 +151,37 @@ def image_url(code_wmo):
 
 # WMO code pour current data
 # print(image_url(f"{wmo_now}"))
+
+# %%
+"""
+NOW
+"""
+# le but est de créer un tableau avec la temp, le wmocode, la precip, le vent et sa direction.
+import matplotlib.pyplot as plt
+from plottable import Table, ColumnDefinition
+from plottable.formatters import decimal_to_percent
+from plottable.plots import bar, percentile_bars, percentile_stars, progress_donut
+
+
+# Init a figure
+fig, ax = plt.subplots(figsize=(2, 5))
+
+data_tab_now = {
+    "Date": [date_now],
+    "Température": [temp_now],
+    "WMO": [wmo_now],
+    "Précipitation": [precip_now],
+    "Vent": [wind_now],
+    "Direction": [wind_direc_now],
+}
+df_tab_now = pd.DataFrame(data_tab_now)
+print(df_tab_now)
+# Create the Table() object
+# tab = Table(df_current.iloc[:, -1:])
+
+# Display the output
+
+# %%
+"""
+FORECAST
+"""
