@@ -14,20 +14,26 @@ response_daily = requests.get(url_daily)
 # Vérification requête
 if response_daily.status_code == 200:
     data_daily = response_daily.json()
+    # Création Dataframe daily
+    df_daily = pd.DataFrame(data_daily)
+    print(df_daily.iloc[:, -1])
+
+    pd.set_option("display.max_rows", None)
+
+    # Création du csv associé
+    df_daily.to_csv("df_daily.csv", index=False)
 
     # Extraction des données
     tempmax = data_daily["daily"]["temperature_2m_max"]
-    # print(tempmax)
     tempmin = data_daily["daily"]["temperature_2m_min"]
+    wmo_daily = data_daily["daily"]["weathercode"]
+    sunrise = data_daily["daily"]["sunrise"]
+    sunset = data_daily["daily"]["sunset"]
+    uv = data_daily["daily"]["uv_index_max"]
+    precip_daily_sum = data_daily["daily"]["precipitation_sum"]
+    precip_proba_daily = data_daily["daily"]["precipitation_probability_max"]
+    precip_hours_daily = data_daily["daily"]["precipitation_hours"]
 
-# Création Dataframe daily
-df_daily = pd.DataFrame(data_daily)
-# print(df_daily.iloc[:, -1])
-
-pd.set_option("display.max_rows", None)
-
-# Création du csv associé
-df_daily.to_csv("df_daily.csv", index=False)
 
 # %%
 """
@@ -35,23 +41,45 @@ Hourly data
 """
 
 # Extraction API hourly data
-url_hourly = "https://api.open-meteo.com/v1/forecast?latitude=43.6109&longitude=3.8763&hourly=temperature_2m&timezone=Europe%2FLondon"
+url_hourly = "https://api.open-meteo.com/v1/forecast?latitude=43.6109&longitude=3.8763&hourly=temperature_2m,windspeed_10m&timezone=Europe%2FLondon"
 response_hourly = requests.get(url_hourly)
 
 # Vérification de l'url
 if response_hourly.status_code == 200:
     data_hourly = response_hourly.json()
+    # Création dataframe hourly
+    df_hourly = pd.DataFrame(data_hourly)
 
+    # Création du csv associé
+    df_hourly.to_csv("df_hourly.csv", index=False)
     # Extraction température hourly
-    temphourly = data_hourly["hourly"]["temperature_2m"]
+    temp_hourly = data_hourly["hourly"]["temperature_2m"]
     # for i in range(len(temphourly)):
     #    print(temphourly[i])
+    wind_hourly = data_hourly["hourly"]["windspeed_10m"]
 
-# Création dataframe hourly
-df_hourly = pd.DataFrame(data_hourly)
+    # Calcul vent moyen par jour sur les 7 prochain jour
+    size = 24
+    sub_lists = [
+        wind_hourly[idx : idx + size] for idx in range(0, len(wind_hourly), size)
+    ]
 
-# Création du csv associé
-df_hourly.to_csv("df_hourly.csv", index=False)
+    def average_wind_daily():
+        vent_moy = []
+        for i in range(7):
+            xmoy = sum(sub_lists[i]) / len(sub_lists[i])
+            vent_moy.append(round(xmoy, 2))
+        return vent_moy
+
+    # Vent moyen par jour sur les 7 jours
+    # print(average_wind_daily())
+
+    # Changement écriture time (on enlève les dates avant les heures)
+    time_hourly = []
+    for i in range(len(df_hourly["hourly"]["time"])):
+        time_hourly.append(df_hourly["hourly"]["time"][i][-5:])
+
+    # print(time_hourly)
 
 
 # %%
@@ -67,17 +95,17 @@ response_current = requests.get(url_current)
 if response_current.status_code == 200:
     data_current = response_current.json()
 
+    # Création dataframe current
+    df_current = pd.DataFrame(data_current)
+
+    # Création csv associé
+    df_current.to_csv("df_current.csv", index=False)
+
     # Extraction température hourly
-    tempnow = data_current["current"]["temperature_2m"]
-    precipnow = data_current["current"]["precipitation"]
-    wmonow = data_current["current"]["weathercode"]
-    windnow = data_current["current"]["windspeed_10m"]
-
-# Création dataframe current
-df_current = pd.DataFrame(data_current)
-
-# Création csv associé
-df_current.to_csv("df_current.csv", index=False)
+    temp_now = data_current["current"]["temperature_2m"]
+    precip_now = data_current["current"]["precipitation"]
+    wmo_now = data_current["current"]["weathercode"]
+    wind_now = data_current["current"]["windspeed_10m"]
 
 
 # %%
@@ -113,9 +141,8 @@ def image_url(code_wmo):
 # print(image_url(f"{data_current['current']['weathercode']}"))
 
 # Boucle pour la liste daily
-for item in data_daily["daily"]["weathercode"]:
-    print(image_url(f"{item}"))
+# for item in range(len(wmo_daily)):
+#     print(image_url(f"{wmo_daily[item]}"))
 
 # WMO code pour current data
-print(wmonow)
-print(image_url(f"{wmonow}"))
+# print(image_url(f"{wmo_now}"))
