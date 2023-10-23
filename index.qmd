@@ -4,6 +4,9 @@
 
 # FORECAST
 
-> insérer tableau
+
+> insérer tableau  
+> graphique évolution température 7 prochain jours avec curseur pour se déplacer
+
 
 
