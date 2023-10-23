@@ -10,3 +10,6 @@ dailydata.csv
 df_daily.csv
 df_hourly.csv
 df_current.csv
+/__pycache__/
+.coverage
+/.pytest_cache/
