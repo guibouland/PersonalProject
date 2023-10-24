@@ -98,14 +98,14 @@ if response_current.status_code == 200:
 
     # Création dataframe current
     df_current = pd.DataFrame(data_current)
-    print(df_current.iloc[:, -1])
+    # print(df_current.iloc[:, -1])
 
     # Création csv associé
     df_current.to_csv("df_current.csv", index=False)
 
     # Extraction data current
     date_now = data_current["current"]["time"][:10]
-    print(date_now)
+    # print(date_now)
     temp_now = data_current["current"]["temperature_2m"]
     precip_now = data_current["current"]["precipitation"]
     wmo_now = data_current["current"]["weathercode"]
@@ -157,30 +157,63 @@ def image_url(code_wmo):
 NOW
 """
 # le but est de créer un tableau avec la temp, le wmocode, la precip, le vent et sa direction.
-import matplotlib.pyplot as plt
-from plottable import Table, ColumnDefinition
-from plottable.formatters import decimal_to_percent
-from plottable.plots import bar, percentile_bars, percentile_stars, progress_donut
+# import matplotlib.pyplot as plt
+# from plottable import Table, ColumnDefinition
+# from plottable.formatters import decimal_to_percent
+# from plottable.plots import (
+#    bar,
+#    percentile_bars,
+#    percentile_stars,
+#    progress_donut,
+#    image,
+#    circled_image,
+# )
+#
+#
+## Init a figure
+# fig, ax = plt.subplots(figsize=(2, 5))
+#
+# data_tab_now = {
+#    "Date": [date_now],
+#    "Température": [temp_now],
+#    "WMO": [image_url(f"{wmo_now}")],
+#    "Précipitation": [precip_now],
+#    "Vent": [wind_now],
+#    "Direction": [wind_direc_now],
+# }
+# df_tab_now = pd.DataFrame(data_tab_now)
+#
+# coldef = [
+#    ColumnDefinition(name="WMO", textprops={"ha": "center"}, width=2, plot_fn=image)
+# ]
+# print(df_tab_now)
+## Create the Table() object
+# tab = Table(df_tab_now, column_definitions=coldef)
+#
+## Display the output
+# plt.show()
 
+from tabulate import tabulate
 
-# Init a figure
-fig, ax = plt.subplots(figsize=(2, 5))
+#
+# tablenow_html = tabulate(df_tab_now, tablefmt="html", headers="keys", showindex=False)
+# print(tablenow_html)
 
-data_tab_now = {
-    "Date": [date_now],
-    "Température": [temp_now],
-    "WMO": [wmo_now],
-    "Précipitation": [precip_now],
-    "Vent": [wind_now],
-    "Direction": [wind_direc_now],
-}
-df_tab_now = pd.DataFrame(data_tab_now)
-print(df_tab_now)
-# Create the Table() object
-# tab = Table(df_current.iloc[:, -1:])
+datanow = [
+    [
+        "date_now",
+        "temp_now",
+        "precip_now",
+        '<img src = image_url(f"{wmo_now}") alt="WMO_NOW">',
+        "wind_now",
+        "wind_direc_now",
+    ]
+]
+headers = ["Date", "Température", "Précipitations", "WMO", "Vent", "Direction"]
+table_html = tabulate(datanow, headers, tablefmt="html", showindex=False)
 
-# Display the output
-
+# Print or use the HTML as needed
+# print(table_html)
 # %%
 """
 FORECAST
