@@ -1,3 +1,7 @@
+---
+execute:
+    echo: false
+---
 # NOW
 
 > insérer tableau
@@ -9,4 +13,85 @@
 > graphique évolution température 7 prochain jours avec curseur pour se déplacer
 
 
+```{python}
+import pandas as pd
+import requests
+import json
+import csv
+```
+
+```{python}
+# Initialisation images WMO
+with open("descriptions.json") as json_file:
+    descriptions = json.load(json_file)
+
+
+# Boucle d'images
+for code_wmo, value in descriptions.items():
+    description = value["description"]
+    image_url = value["image"]
+
+#Fonction qui renvoie l'url de l'image
+def image_url(code_wmo):
+    if code_wmo in descriptions:
+        return descriptions[code_wmo]["image"]
+    else:
+        return "Code WMO non trouvé"
+```
+
+```{python}
+"""
+DATA NOW
+"""
+url_current = "https://api.open-meteo.com/v1/forecast?latitude=43.6109&longitude=3.8763&current=temperature_2m,precipitation,weathercode,windspeed_10m,winddirection_10m&timezone=Europe%2FLondon"
+
+response_current = requests.get(url_current)
+
+# Vérification de l'url
+if response_current.status_code == 200:
+    data_current = response_current.json()
+
+    # Création dataframe current
+    df_current = pd.DataFrame(data_current)
+    # print(df_current.iloc[:, -1])
+
+    # Création csv associé
+    df_current.to_csv("df_current.csv", index=False)
+
+    # Extraction data current
+    date_now = data_current["current"]["time"][:10]
+    # print(date_now)
+    temp_now = data_current["current"]["temperature_2m"]
+    precip_now = data_current["current"]["precipitation"]
+    wmo_now = data_current["current"]["weathercode"]
+    wind_now = data_current["current"]["windspeed_10m"]
+    wind_direc_now = data_current["current"]["winddirection_10m"]
+
+#Création dataframe pour le rendu tableau
+data_tab_now = {
+    "Date": [date_now],
+    "Température": [temp_now],
+    "WMO": [image_url(f"{wmo_now}")],
+    "Précipitation": [precip_now],
+    "Vent": [wind_now],
+    "Direction": [wind_direc_now],
+}
+df_tab_now = pd.DataFrame(data_tab_now)
+
+from IPython.display import Markdown, Image
+from tabulate import tabulate
+datanow = [
+    [
+        date_now,
+        temp_now,
+        precip_now,
+        Image(image_url(f"{wmo_now}")),
+        wind_now,
+        wind_direc_now,
+    ]
+]
+headersnow = ["Date", "Température", "Précipitations", "WMO", "Vent", "Direction"]
+Markdown(tabulate(datanow, headersnow, showindex=False))
+# print(df_tab_now.to_markdown(tablefmt="grid", index=False))
+```
 

@@ -173,15 +173,15 @@ NOW
 ## Init a figure
 # fig, ax = plt.subplots(figsize=(2, 5))
 #
-# data_tab_now = {
-#    "Date": [date_now],
-#    "Température": [temp_now],
-#    "WMO": [image_url(f"{wmo_now}")],
-#    "Précipitation": [precip_now],
-#    "Vent": [wind_now],
-#    "Direction": [wind_direc_now],
-# }
-# df_tab_now = pd.DataFrame(data_tab_now)
+data_tab_now = {
+    "Date": [date_now],
+    "Température": [temp_now],
+    "WMO": [image_url(f"{wmo_now}")],
+    "Précipitation": [precip_now],
+    "Vent": [wind_now],
+    "Direction": [wind_direc_now],
+}
+df_tab_now = pd.DataFrame(data_tab_now)
 #
 # coldef = [
 #    ColumnDefinition(name="WMO", textprops={"ha": "center"}, width=2, plot_fn=image)
