@@ -27,7 +27,10 @@ website:
       
 
         
-            
+output:
+  html:
+    media:
+      display: true           
 
 
 format:
@@ -35,6 +38,6 @@ format:
     theme: cosmo
     css: styles.css
     toc: false
-
+jupyter: python3
 editor: visual
 

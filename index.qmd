@@ -64,6 +64,7 @@ if response_current.status_code == 200:
     temp_now = data_current["current"]["temperature_2m"]
     precip_now = data_current["current"]["precipitation"]
     wmo_now = data_current["current"]["weathercode"]
+    strwmonow = f"{wmo_now}"
     wind_now = data_current["current"]["windspeed_10m"]
     wind_direc_now = data_current["current"]["winddirection_10m"]
 
@@ -71,27 +72,37 @@ if response_current.status_code == 200:
 data_tab_now = {
     "Date": [date_now],
     "Température": [temp_now],
-    "WMO": [image_url(f"{wmo_now}")],
+    "WMO": [image_url(strwmonow)],
     "Précipitation": [precip_now],
     "Vent": [wind_now],
     "Direction": [wind_direc_now],
 }
 df_tab_now = pd.DataFrame(data_tab_now)
 
-from IPython.display import Markdown, Image
+from IPython.display import Markdown, display, HTML
+from PIL import Image
 from tabulate import tabulate
+imagenow = image_url(strwmonow)
+respnow = requests.get(imagenow, stream=True)
+imgnow=Image.open(respnow.raw)
+display(imgnow)
+
 datanow = [
     [
         date_now,
         temp_now,
         precip_now,
-        Image(image_url(f"{wmo_now}")),
+        imgnow,
         wind_now,
         wind_direc_now,
     ]
 ]
 headersnow = ["Date", "Température", "Précipitations", "WMO", "Vent", "Direction"]
-Markdown(tabulate(datanow, headersnow, showindex=False))
+
+tablenow = tabulate(datanow, headersnow, showindex=False, tablefmt="pipe")
+
+display(Markdown(tablenow))
+#Markdown(tabulate(datanow, headersnow, showindex=False))
 # print(df_tab_now.to_markdown(tablefmt="grid", index=False))
 ```
 
