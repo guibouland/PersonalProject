@@ -2,17 +2,6 @@
 execute:
     echo: false
 ---
-# NOW
-
-> insérer tableau
-
-# FORECAST
-
-
-> insérer tableau  
-> graphique évolution température 7 prochain jours avec curseur pour se déplacer
-
-
 ```{python}
 import pandas as pd
 import requests
@@ -39,6 +28,7 @@ def image_url(code_wmo):
         return "Code WMO non trouvé"
 ```
 
+# NOW
 ```{python}
 """
 DATA NOW
@@ -78,7 +68,9 @@ data_tab_now = {
     "Direction": [wind_direc_now],
 }
 df_tab_now = pd.DataFrame(data_tab_now)
+```
 
+```{python}
 from IPython.display import Markdown, display, HTML
 from PIL import Image
 from tabulate import tabulate
@@ -86,18 +78,19 @@ imagenow = image_url(strwmonow)
 respnow = requests.get(imagenow, stream=True)
 imgnow=Image.open(respnow.raw)
 display(imgnow)
+```
 
+```{python}
 datanow = [
     [
         date_now,
         temp_now,
         precip_now,
-        imgnow,
         wind_now,
         wind_direc_now,
     ]
 ]
-headersnow = ["Date", "Température", "Précipitations", "WMO", "Vent", "Direction"]
+headersnow = ["Date", "Température", "Précipitations", "Vent", "Direction"]
 
 tablenow = tabulate(datanow, headersnow, showindex=False, tablefmt="pipe")
 
@@ -105,4 +98,16 @@ display(Markdown(tablenow))
 #Markdown(tabulate(datanow, headersnow, showindex=False))
 # print(df_tab_now.to_markdown(tablefmt="grid", index=False))
 ```
+
+
+
+# FORECAST
+
+
+> insérer tableau  
+> graphique évolution température 7 prochain jours avec curseur pour se déplacer
+
+
+
+
 
