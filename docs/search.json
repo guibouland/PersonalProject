@@ -2,9 +2,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "NOW",
+    "title": "EN CE MOMENT",
     "section": "",
-    "text": "Date\nTempérature\nPrécipitations\nVent\nDirection\n\n\n\n\n2023-10-29\n20.5\n0\n19.9\n174\n\n\n\n\n\n\n\nEn-tête 1 | En-tête 2 | En-tête 3\n![Image 1](imagenow) | ![Image 2](imagenow) | ![Image 3](imgnow)\nLigne 2, Colonne 1 | Ligne 2, Colonne 2 | Ligne 2, Colonne 3\n![Image 4](imagenow) | Ligne 4, Colonne 2 | Ligne 4, Colonne 3\n\n\n\nFORECAST\n\ninsérer tableau\ngraphique évolution température 7 prochain jours avec curseur pour se déplacer"
+    "text": "Date\nWMO\nTempérature\nPrécipitations\nVent\n\n\n2023-10-29\n\n19.0°C\n0.0mm\n21.7kh/h\n\n\n\n\n\n\nPRÉVISIONS\n\ninsérer tableau\ngraphique évolution température et vent 7 prochain jours avec curseur pour se déplacer"
   },
   {
     "objectID": "about.html",
