@@ -109,6 +109,7 @@ if response_current.status_code == 200:
     temp_now = data_current["current"]["temperature_2m"]
     precip_now = data_current["current"]["precipitation"]
     wmo_now = data_current["current"]["weathercode"]
+    strwmonow = f"{wmo_now}"
     wind_now = data_current["current"]["windspeed_10m"]
     wind_direc_now = data_current["current"]["winddirection_10m"]
 
@@ -156,64 +157,31 @@ def image_url(code_wmo):
 """
 NOW
 """
-# le but est de créer un tableau avec la temp, le wmocode, la precip, le vent et sa direction.
-# import matplotlib.pyplot as plt
-# from plottable import Table, ColumnDefinition
-# from plottable.formatters import decimal_to_percent
-# from plottable.plots import (
-#    bar,
-#    percentile_bars,
-#    percentile_stars,
-#    progress_donut,
-#    image,
-#    circled_image,
-# )
-#
-#
-## Init a figure
-# fig, ax = plt.subplots(figsize=(2, 5))
-#
-data_tab_now = {
-    "Date": [date_now],
-    "Température": [temp_now],
-    "WMO": [image_url(f"{wmo_now}")],
-    "Précipitation": [precip_now],
-    "Vent": [wind_now],
-    "Direction": [wind_direc_now],
-}
-df_tab_now = pd.DataFrame(data_tab_now)
-#
-# coldef = [
-#    ColumnDefinition(name="WMO", textprops={"ha": "center"}, width=2, plot_fn=image)
-# ]
-# print(df_tab_now)
-## Create the Table() object
-# tab = Table(df_tab_now, column_definitions=coldef)
-#
-## Display the output
-# plt.show()
-
+from IPython.display import Markdown, display, HTML
+from PIL import Image
 from tabulate import tabulate
 
-#
-# tablenow_html = tabulate(df_tab_now, tablefmt="html", headers="keys", showindex=False)
-# print(tablenow_html)
+# Affichage des images
+imagenow = image_url(strwmonow)
+respnow = requests.get(imagenow, stream=True)
+imgnow = Image.open(respnow.raw)
+# display(imgnow): à utiliser dans le qmd
 
+# Tableau
 datanow = [
     [
-        "date_now",
-        "temp_now",
-        "precip_now",
-        '<img src = image_url(f"{wmo_now}") alt="WMO_NOW">',
-        "wind_now",
-        "wind_direc_now",
+        date_now,
+        temp_now,
+        precip_now,
+        wind_now,
+        wind_direc_now,
     ]
 ]
-headers = ["Date", "Température", "Précipitations", "WMO", "Vent", "Direction"]
-table_html = tabulate(datanow, headers, tablefmt="html", showindex=False)
+headersnow = ["Date", "Température", "Précipitations", "Vent", "Direction"]
+tablenow = tabulate(datanow, headersnow, showindex=False, tablefmt="pipe")
 
-# Print or use the HTML as needed
-# print(table_html)
+# display(Markdown(tablenow)) à utiliser dans le qmd
+
 # %%
 """
 FORECAST

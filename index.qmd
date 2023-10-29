@@ -99,7 +99,29 @@ display(Markdown(tablenow))
 # print(df_tab_now.to_markdown(tablefmt="grid", index=False))
 ```
 
+```{python}
+#faire un tableau avec des séparateurs et une fonction join?
+# a priori pas besoin de séparateurs de lignes
+#comment display l'image dedans?
 
+import markdown
+
+# Liste des données du tableau
+tableau = [
+    ["En-tête 1", "En-tête 2", "En-tête 3"],
+    ["![Image 1](imagenow)", "![Image 2](imagenow)", "![Image 3](imgnow)"],
+    ["Ligne 2, Colonne 1", "Ligne 2, Colonne 2", "Ligne 2, Colonne 3"],
+    ["![Image 4](imagenow)", "Ligne 4, Colonne 2", "Ligne 4, Colonne 3"]
+]
+
+# Convertir le tableau en Markdown
+tableau_markdown = "\n".join([" | ".join(row) for row in tableau])
+
+# Afficher le rendu HTML
+print(tableau_markdown)
+
+
+```
 
 # FORECAST
 
