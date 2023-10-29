@@ -2,6 +2,8 @@ import pandas as pd
 import requests
 import json
 import csv
+import datetime
+
 
 # %%
 """
@@ -35,7 +37,9 @@ if response_daily.status_code == 200:
     precip_hours_daily = data_daily["daily"]["precipitation_hours"]
     wind_direc_daily = data_daily["daily"]["winddirection_10m_dominant"]
 
-
+Date = pd.to_datetime(data_daily["daily"]["time"])
+Date = [datetime.datetime.strftime(a, "%A %d/%m") for a in Date]
+print(Date)
 # %%
 """
 Hourly data
@@ -53,10 +57,9 @@ if response_hourly.status_code == 200:
 
     # Création du csv associé
     df_hourly.to_csv("df_hourly.csv", index=False)
+
     # Extraction température hourly
     temp_hourly = data_hourly["hourly"]["temperature_2m"]
-    # for i in range(len(temphourly)):
-    #    print(temphourly[i])
     wind_hourly = data_hourly["hourly"]["windspeed_10m"]
 
     # Calcul vent moyen par jour sur les 7 prochain jour
@@ -68,7 +71,13 @@ if response_hourly.status_code == 200:
     def average_wind_daily():
         vent_moy = []
         for i in range(7):
-            xmoy = sum(sub_lists[i]) / len(sub_lists[i])
+            x = len(sub_lists[i])
+            if (
+                sub_lists[i] == None
+            ):  # Si il y a pas de donnée dans une des sous-listes, on la passe
+                x = len(sub_lists[i]) - 1
+                continue
+            xmoy = sum(sub_lists[i]) / x
             vent_moy.append(round(xmoy, 2))
         return vent_moy
 
@@ -82,7 +91,8 @@ if response_hourly.status_code == 200:
 
     # print(time_hourly)
 
-
+vent_moy = average_wind_daily()
+print(vent_moy)
 # %%
 """
 Current data
@@ -142,16 +152,6 @@ def image_url(code_wmo):
     else:
         return "Code WMO non trouvé"
 
-
-# Renvoie l'url de l'image du WMO
-# print(image_url(f"{data_current['current']['weathercode']}"))
-
-# Boucle pour la liste daily
-# for item in range(len(wmo_daily)):
-#     print(image_url(f"{wmo_daily[item]}"))
-
-# WMO code pour current data
-# print(image_url(f"{wmo_now}"))
 
 # %%
 """

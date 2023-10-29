@@ -11,7 +11,7 @@ import csv
 
 ```{python}
 # Initialisation images WMO
-with open("descriptions.json") as json_file:
+with open("descriptions.json", "r") as json_file:
     descriptions = json.load(json_file)
 
 
@@ -28,7 +28,7 @@ def image_url(code_wmo):
         return "Code WMO non trouvé"
 ```
 
-# NOW
+# EN CE MOMENT
 ```{python}
 """
 DATA NOW
@@ -69,65 +69,65 @@ data_tab_now = {
 }
 df_tab_now = pd.DataFrame(data_tab_now)
 ```
-
 ```{python}
-from IPython.display import Markdown, display, HTML
-from PIL import Image
-from tabulate import tabulate
-imagenow = image_url(strwmonow)
-respnow = requests.get(imagenow, stream=True)
-imgnow=Image.open(respnow.raw)
-display(imgnow)
+"""
+Tableau en html des données de maintenant
+"""
+from IPython.display import HTML
+
+tablenow = f"""
+<table>
+  <tr>
+    <th style="text-align: center;">Date</th>
+    <th style="text-align: center;">WMO</th>
+    <th style="text-align: center;">Température</th>
+    <th style="text-align: center;">Précipitations</th>
+    <th style="text-align: center;">Vent</th>
+  </tr>
+  <tr>
+    <td style="text-align: center; vertical-align: middle;">{date_now}</td>
+    <td style="background-color: #f0f8ff; text-align: center;"><img src ={descriptions[str(wmo_now)]['image']}></td>
+    <td style="text-align: center; vertical-align: middle;">{temp_now}°C</td>
+    <td style="text-align: center; vertical-align: middle;">{precip_now}mm</td>
+    <td style="text-align: center; vertical-align: middle;">{wind_now}kh/h</td>
+  </tr>
+</table>
+"""
+
+HTML(tablenow)
 ```
 
 ```{python}
-datanow = [
-    [
-        date_now,
-        temp_now,
-        precip_now,
-        wind_now,
-        wind_direc_now,
-    ]
-]
-headersnow = ["Date", "Température", "Précipitations", "Vent", "Direction"]
-
-tablenow = tabulate(datanow, headersnow, showindex=False, tablefmt="pipe")
-
-display(Markdown(tablenow))
-#Markdown(tabulate(datanow, headersnow, showindex=False))
-# print(df_tab_now.to_markdown(tablefmt="grid", index=False))
+#
+#Voici un essai à la main
+#
+#from IPython.display import Markdown, display
+#init=""
+#A = init + f"![{descriptions[str(wmo_now)]['description']}]({descriptions[str(wmo_now)]['image']})"
+#display(Markdown(A))
+#
+##Essai tableau en ligne
+#a = "|" + f"{date_now}|"
+#b = init + f"![{descriptions[str(wmo_now)]['description']}]({descriptions[str(wmo_now)]['image']})|"
+#c = f"{temp_now}°C|"
+#d = f"{precip_now}mm|"
+#e = f"{wind_now}km/h|"
+#head = "|Date|Icone|Température|Précipitations|Vent|"
+#sepa = "|"
+#for i in range(5):
+#    sepa+= f":---:|"
+#f= a + b + c + d + e
+#g= head + "\n" +sepa +"\n" + f
+#print(g)
+#display(Markdown(g))
+#
 ```
 
-```{python}
-#faire un tableau avec des séparateurs et une fonction join?
-# a priori pas besoin de séparateurs de lignes
-#comment display l'image dedans?
-
-import markdown
-
-# Liste des données du tableau
-tableau = [
-    ["En-tête 1", "En-tête 2", "En-tête 3"],
-    ["![Image 1](imagenow)", "![Image 2](imagenow)", "![Image 3](imgnow)"],
-    ["Ligne 2, Colonne 1", "Ligne 2, Colonne 2", "Ligne 2, Colonne 3"],
-    ["![Image 4](imagenow)", "Ligne 4, Colonne 2", "Ligne 4, Colonne 3"]
-]
-
-# Convertir le tableau en Markdown
-tableau_markdown = "\n".join([" | ".join(row) for row in tableau])
-
-# Afficher le rendu HTML
-print(tableau_markdown)
-
-
-```
-
-# FORECAST
+# PRÉVISIONS
 
 
 > insérer tableau  
-> graphique évolution température 7 prochain jours avec curseur pour se déplacer
+> graphique évolution température et vent 7 prochain jours avec curseur pour se déplacer
 
 
 

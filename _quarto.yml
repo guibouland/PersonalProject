@@ -27,10 +27,8 @@ website:
       
 
         
-output:
-  html:
-    media:
-      display: true           
+execute:
+  echo: false          
 
 
 format:
@@ -39,5 +37,4 @@ format:
     css: styles.css
     toc: false
 jupyter: python3
-editor: visual
 
