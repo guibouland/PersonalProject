@@ -4,7 +4,6 @@ project:
   render:
     - index.qmd
     - about.qmd
-    - more.qmd
 
 website:
   title: "Météo"
@@ -19,11 +18,9 @@ website:
         text: GitHub
     left:
       - href: index.qmd
-        text: Home
-      - href: more.qmd
-        text: More
+        text: Accueil
       - href: about.qmd
-        text: About
+        text: En savoir plus
       
 
         
