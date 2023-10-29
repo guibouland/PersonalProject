@@ -13,3 +13,5 @@ df_current.csv
 /__pycache__/
 .coverage
 /.pytest_cache/
+notes2.txt
+notes3.txt
