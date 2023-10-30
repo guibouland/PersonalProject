@@ -1,6 +1,313 @@
----
-title: "About"
----
+# En savoir plus
 
-About this site
+Voici un tableau des prévisions des 6 prochains jours. Cependant, les données ne viennent pas de météofrance mais de l'onglet "Weather Forecast" général du [site](https://open-meteo.com/en/docs).
+
+```{python}
+import pandas as pd
+import requests
+import json
+import csv
+from datetime import datetime, timedelta
+from IPython.display import HTML
+
+```
+
+```{python}
+# Initialisation images WMO
+with open("descriptions.json", "r") as json_file:
+    descriptions = json.load(json_file)
+
+
+# Boucle d'images
+for code_wmo, value in descriptions.items():
+    description = value["description"]
+    image_url = value["image"]
+
+#Fonction qui renvoie l'url de l'image
+def image_url(code_wmo):
+    if code_wmo in descriptions:
+        return descriptions[code_wmo]["image"]
+    else:
+        return "Code WMO non trouvé"
+
+```
+```{python}
+"""
+Hourly data
+"""
+
+# Extraction API hourly data
+url_hourly = "https://api.open-meteo.com/v1/forecast?latitude=43.6109&longitude=3.8763&hourly=temperature_2m,windspeed_10m&timezone=Europe%2FLondon"
+response_hourly = requests.get(url_hourly)
+
+# Vérification de l'url
+if response_hourly.status_code == 200:
+    data_hourly = response_hourly.json()
+    # Création dataframe hourly
+    df_hourly = pd.DataFrame(data_hourly)
+
+    # Création du csv associé
+    df_hourly.to_csv("df_hourly.csv", index=False)
+
+    # Extraction température hourly
+    temp_hourly = data_hourly["hourly"]["temperature_2m"]
+    wind_hourly = data_hourly["hourly"]["windspeed_10m"]
+
+    # Calcul vent moyen par jour sur les 7 prochain jour
+    size = 24
+    sub_lists = [
+        wind_hourly[idx : idx + size] for idx in range(0, len(wind_hourly), size)
+    ]
+
+    def average_wind_daily():
+        vent_moy = []
+        for i in range(7):
+            x = len(sub_lists[i])
+            if (
+                sub_lists[i] == None
+            ):  # Si il y a pas de donnée dans une des sous-listes, on la passe
+                x = len(sub_lists[i]) - 1
+                continue
+            xmoy = sum(sub_lists[i]) / x
+            vent_moy.append(round(xmoy, 2))
+        return vent_moy
+
+
+    # Changement écriture time (on enlève les dates avant les heures) pour le graphique de plus bas
+    time_hourly = []
+    for i in range(len(df_hourly["hourly"]["time"])):
+        time_hourly.append(df_hourly["hourly"]["time"][i][-5:])
+
+
+vent_moy = average_wind_daily() # Lsite des vents moyens par jour sur les 7 prochains jours
+```
+
+```{python}
+"""
+DATA DAILY
+"""
+
+url_daily = "https://api.open-meteo.com/v1/forecast?latitude=43.6109&longitude=3.8763&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_sum,precipitation_hours,precipitation_probability_max,winddirection_10m_dominant&timezone=Europe%2FLondon"
+response_daily = requests.get(url_daily)
+
+# Vérification requête
+if response_daily.status_code == 200:
+    data_daily = response_daily.json()
+    # Création Dataframe daily
+    df_daily = pd.DataFrame(data_daily)
+    # print(df_daily.iloc[:, -1])
+
+    pd.set_option("display.max_rows", None)
+
+    # Création du csv associé
+    df_daily.to_csv("df_daily.csv", index=False)
+
+    # Extraction des données
+    tempmax = data_daily["daily"]["temperature_2m_max"]
+    tempmin = data_daily["daily"]["temperature_2m_min"]
+    wmo_daily = data_daily["daily"]["weathercode"]
+    sunrise = data_daily["daily"]["sunrise"]
+    sunset = data_daily["daily"]["sunset"]
+    uv = data_daily["daily"]["uv_index_max"]
+    precip_daily_sum = data_daily["daily"]["precipitation_sum"]
+    precip_proba_daily = data_daily["daily"]["precipitation_probability_max"]
+    precip_hours_daily = data_daily["daily"]["precipitation_hours"]
+    wind_direc_daily = data_daily["daily"]["winddirection_10m_dominant"]
+
+# Initialisation des dates
+Date = pd.to_datetime(data_daily["daily"]["time"])
+Date = [datetime.strftime(a, "%A %d/%m") for a in Date]
+
+#Changement heure sunset et sunrise
+
+sunsetchanged = []
+for i in range(len(df_daily["daily"]["sunset"])):
+    # On prend les heures de coucher de soleil
+    h = f'{df_daily["daily"]["sunset"][i][-5:]}'
+    
+    # On les convertis en objet datetime
+    heure_objet = datetime.strptime(h, "%H:%M")
+
+    # On y ajoute une heure
+    nouvelle_heure = heure_objet + timedelta(hours=1)
+
+    # On convertit la nouvelle heure en format "hh:mm"
+    nouv_h_format = nouvelle_heure.strftime("%H:%M")
+
+    # On les remet dans la liste, mais changés
+    sunsetchanged.append(nouv_h_format)
+sunrisechanged = []
+for i in range(len(df_daily["daily"]["sunrise"])):
+    sunrisechanged.append(df_daily["daily"]["sunrise"][i][-5:])
+```
+
+
+```{python}
+"""
+Hourly data
+"""
+
+# Extraction API hourly data
+url_hourly = "https://api.open-meteo.com/v1/forecast?latitude=43.6109&longitude=3.8763&hourly=temperature_2m,windspeed_10m&timezone=Europe%2FLondon"
+response_hourly = requests.get(url_hourly)
+
+# Vérification de l'url
+if response_hourly.status_code == 200:
+    data_hourly = response_hourly.json()
+    # Création dataframe hourly
+    df_hourly = pd.DataFrame(data_hourly)
+
+    # Création du csv associé
+    df_hourly.to_csv("df_hourly.csv", index=False)
+
+    # Extraction température hourly
+    temp_hourly = data_hourly["hourly"]["temperature_2m"]
+    wind_hourly = data_hourly["hourly"]["windspeed_10m"]
+
+    # Calcul vent moyen par jour sur les 7 prochain jour
+    size = 24
+    sub_lists = [
+        wind_hourly[idx : idx + size] for idx in range(0, len(wind_hourly), size)
+    ]
+
+    def average_wind_daily():
+        vent_moy = []
+        for i in range(7):
+            x = len(sub_lists[i])
+            if (
+                sub_lists[i] == None
+            ):  # Si il y a pas de donnée dans une des sous-listes, on la passe
+                x = len(sub_lists[i]) - 1
+                continue
+            xmoy = sum(sub_lists[i]) / x
+            vent_moy.append(round(xmoy, 2))
+        return vent_moy
+
+
+    # Changement écriture time (on enlève les dates avant les heures) pour le graphique de plus bas
+    time_hourly = []
+    for i in range(len(df_hourly["hourly"]["time"])):
+        time_hourly.append(df_hourly["hourly"]["time"][i][-5:])
+
+
+vent_moy = average_wind_daily() # Lsite des vents moyens par jour sur les 7 prochains jours
+```
+
+```{python}
+"""
+Tableau des prévisions journalières
+"""
+
+tabledaily = f"""
+<table style="margin: 0 auto;">
+  <tr>
+    <th style ="background-color: rgb(240, 240, 240);"></th> <!-- Case vide -->
+    <th style="text-align: center;background-color: rgb(240, 240, 240); ">{Date[0]}</th>
+    <th style="text-align: center;background-color: rgb(240, 240, 240); ">{Date[1]}</th>
+    <th style="text-align: center;background-color: rgb(240, 240, 240); ">{Date[2]}</th>
+    <th style="text-align: center;background-color: rgb(240, 240, 240); ">{Date[3]}</th>
+    <th style="text-align: center;background-color: rgb(240, 240, 240); ">{Date[4]}</th>
+    <th style="text-align: center;background-color: rgb(240, 240, 240); ">{Date[5]}</th>
+  </tr>
+    <td style="text-align: center;"><strong>WMO</strong></td>
+    <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[0])]['image']}><br>{descriptions[str(wmo_daily[0])]['description']}</td>
+    <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[1])]['image']}><br>{descriptions[str(wmo_daily[1])]['description']}</td>
+    <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[2])]['image']}><br>{descriptions[str(wmo_daily[2])]['description']}</td>
+    <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[3])]['image']}><br>{descriptions[str(wmo_daily[3])]['description']}</td>
+    <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[4])]['image']}><br>{descriptions[str(wmo_daily[4])]['description']}</td>
+    <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[5])]['image']}><br>{descriptions[str(wmo_daily[5])]['description']}</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"><strong>Température</strong></td>
+    <td style="text-align: center;">{tempmin[0]}°C-{tempmax[0]}°C</td>
+    <td style="text-align: center;">{tempmin[1]}°C-{tempmax[1]}°C</td>
+    <td style="text-align: center;">{tempmin[2]}°C-{tempmax[2]}°C</td>
+    <td style="text-align: center;">{tempmin[3]}°C-{tempmax[3]}°C</td>
+    <td style="text-align: center;">{tempmin[4]}°C-{tempmax[4]}°C</td>
+    <td style="text-align: center;">{tempmin[5]}°C-{tempmax[5]}°C</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"><strong>UV</strong></td>
+    <td style="text-align: center;">{uv[0]}</td>
+    <td style="text-align: center;">{uv[1]}</td>
+    <td style="text-align: center;">{uv[2]}</td>
+    <td style="text-align: center;">{uv[3]}</td>
+    <td style="text-align: center;">{uv[4]}</td>
+    <td style="text-align: center;">{uv[5]}</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"><strong>Précipitations</strong></td>
+    <td style="text-align: center;">{precip_daily_sum[0]}mm<br><img src = "goutte.png"> {precip_proba_daily[0]}%</td>
+    <td style="text-align: center;">{precip_daily_sum[1]}mm<br><img src = "goutte.png"> {precip_proba_daily[1]}%</td>
+    <td style="text-align: center;">{precip_daily_sum[2]}mm<br><img src = "goutte.png"> {precip_proba_daily[2]}%</td>
+    <td style="text-align: center;">{precip_daily_sum[3]}mm<br><img src = "goutte.png"> {precip_proba_daily[3]}%</td>
+    <td style="text-align: center;">{precip_daily_sum[4]}mm<br><img src = "goutte.png"> {precip_proba_daily[4]}%</td>
+    <td style="text-align: center;">{precip_daily_sum[5]}mm<br><img src = "goutte.png"> {precip_proba_daily[5]}%</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"><strong>Vent</strong></td>
+    <td style="text-align: center; vertical-align: middle; ">
+      {vent_moy[0]}km/h
+      <br>
+      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate({wind_direc_daily[0]}deg); display: inline-block; margin: 0 auto;">
+        <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
+        </div>
+      </div>
+    </td>
+    <td style="text-align: center; vertical-align: middle; ">
+      {vent_moy[1]}km/h
+      <br>
+      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate({wind_direc_daily[1]}deg); display: inline-block; margin: 0 auto;">
+        <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
+        </div>
+      </div>
+    </td>
+    <td style="text-align: center; vertical-align: middle; ">
+      {vent_moy[2]}km/h
+      <br>
+      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate({wind_direc_daily[2]}deg); display: inline-block; margin: 0 auto;">
+        <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
+        </div>
+      </div>
+    </td>
+    <td style="text-align: center; vertical-align: middle; ">
+      {vent_moy[3]}km/h
+      <br>
+      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate({wind_direc_daily[3]}deg); display: inline-block; margin: 0 auto;">
+        <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
+        </div>
+      </div>
+    </td>
+    <td style="text-align: center; vertical-align: middle; ">
+      {vent_moy[4]}km/h
+      <br>
+      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate({wind_direc_daily[4]}deg); display: inline-block; margin: 0 auto;">
+        <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
+        </div>
+      </div>
+    </td>
+    <td style="text-align: center; vertical-align: middle; ">
+      {vent_moy[5]}km/h
+      <br>
+      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate({wind_direc_daily[5]}deg); display: inline-block; margin: 0 auto;">
+        <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
+        </div>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align: center;"><strong>Lever/Coucher</strong></td>
+    <td style="text-align: center;">{sunrisechanged[0]} - {sunsetchanged[0]}</td>
+    <td style="text-align: center;">{sunrisechanged[1]} - {sunsetchanged[1]}</td>
+    <td style="text-align: center;">{sunrisechanged[2]} - {sunsetchanged[2]}</td>
+    <td style="text-align: center;">{sunrisechanged[3]} - {sunsetchanged[3]}</td>
+    <td style="text-align: center;">{sunrisechanged[4]} - {sunsetchanged[4]}</td>
+    <td style="text-align: center;">{sunrisechanged[5]} - {sunsetchanged[5]}</td>
+  </tr>
+</table>
+"""
+
+# Rendu du tableau HTML
+HTML(tabledaily)
+```
 

@@ -10,7 +10,7 @@ import datetime
 Daily data
 """
 # Obention de l'API daily
-url_daily = "https://api.open-meteo.com/v1/forecast?latitude=43.6109&longitude=3.8763&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_sum,precipitation_hours,precipitation_probability_max,winddirection_10m_dominant&timezone=Europe%2FLondon"
+url_daily = "https://api.open-meteo.com/v1/meteofrance?latitude=43.6109&longitude=3.8763&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_sum,precipitation_hours,precipitation_probability_max,winddirection_10m_dominant&timezone=Europe%2FLondon"
 response_daily = requests.get(url_daily)
 
 # Vérification requête
@@ -18,7 +18,7 @@ if response_daily.status_code == 200:
     data_daily = response_daily.json()
     # Création Dataframe daily
     df_daily = pd.DataFrame(data_daily)
-    # print(df_daily.iloc[:, -1])
+    print(df_daily.iloc[:, -1])
 
     pd.set_option("display.max_rows", None)
 
@@ -123,7 +123,31 @@ if response_current.status_code == 200:
     wind_now = data_current["current"]["windspeed_10m"]
     wind_direc_now = data_current["current"]["winddirection_10m"]
 
+url_daily = "https://api.open-meteo.com/v1/meteofrance?latitude=43.6109&longitude=3.8763&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_sum,precipitation_hours,precipitation_probability_max,winddirection_10m_dominant&timezone=Europe%2FLondon"
+response_daily = requests.get(url_daily)
 
+# Vérification requête
+if response_daily.status_code == 200:
+    data_daily = response_daily.json()
+    # Création Dataframe daily
+    df_daily = pd.DataFrame(data_daily)
+    print(df_daily.iloc[:, -1])
+
+    pd.set_option("display.max_rows", None)
+
+    # Création du csv associé
+    df_daily.to_csv("df_daily.csv", index=False)
+
+    # Extraction des données
+    tempmax = data_daily["daily"]["temperature_2m_max"]
+    tempmin = data_daily["daily"]["temperature_2m_min"]
+    wmo_daily = data_daily["daily"]["weathercode"]
+    sunrise = data_daily["daily"]["sunrise"]
+    sunset = data_daily["daily"]["sunset"]
+    precip_daily_sum = data_daily["daily"]["precipitation_sum"]
+    precip_proba_daily = data_daily["daily"]["precipitation_probability_max"]
+    precip_hours_daily = data_daily["daily"]["precipitation_hours"]
+    wind_direc_daily = data_daily["daily"]["winddirection_10m_dominant"]
 # %%
 """
 URL des images WMO codes

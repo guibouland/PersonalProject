@@ -8,6 +8,8 @@ import requests
 import json
 import csv
 from datetime import datetime, timedelta
+from IPython.display import HTML
+
 ```
 
 ```{python}
@@ -34,7 +36,7 @@ def image_url(code_wmo):
 """
 DATA NOW
 """
-url_current = "https://api.open-meteo.com/v1/forecast?latitude=43.6109&longitude=3.8763&current=temperature_2m,precipitation,weathercode,windspeed_10m,winddirection_10m&timezone=Europe%2FLondon"
+url_current = "https://api.open-meteo.com/v1/meteofrance?latitude=43.6109&longitude=3.8763&current=temperature_2m,precipitation,weathercode,windspeed_10m,winddirection_10m&timezone=Europe%2FLondon"
 
 response_current = requests.get(url_current)
 
@@ -59,16 +61,6 @@ if response_current.status_code == 200:
     wind_now = data_current["current"]["windspeed_10m"]
     wind_direc_now = data_current["current"]["winddirection_10m"]
 
-#Création dataframe pour le rendu tableau
-data_tab_now = {
-    "Date": [date_now],
-    "Température": [temp_now],
-    "WMO": [image_url(strwmonow)],
-    "Précipitation": [precip_now],
-    "Vent": [wind_now],
-    "Direction": [wind_direc_now],
-}
-df_tab_now = pd.DataFrame(data_tab_now)
 ```
 
 ```{python}
@@ -76,7 +68,7 @@ df_tab_now = pd.DataFrame(data_tab_now)
 DATA DAILY
 """
 
-url_daily = "https://api.open-meteo.com/v1/forecast?latitude=43.6109&longitude=3.8763&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_sum,precipitation_hours,precipitation_probability_max,winddirection_10m_dominant&timezone=Europe%2FLondon"
+url_daily = "https://api.open-meteo.com/v1/meteofrance?latitude=43.6109&longitude=3.8763&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,precipitation_hours,winddirection_10m_dominant&timezone=Europe%2FLondon"
 response_daily = requests.get(url_daily)
 
 # Vérification requête
@@ -97,9 +89,7 @@ if response_daily.status_code == 200:
     wmo_daily = data_daily["daily"]["weathercode"]
     sunrise = data_daily["daily"]["sunrise"]
     sunset = data_daily["daily"]["sunset"]
-    uv = data_daily["daily"]["uv_index_max"]
     precip_daily_sum = data_daily["daily"]["precipitation_sum"]
-    precip_proba_daily = data_daily["daily"]["precipitation_probability_max"]
     precip_hours_daily = data_daily["daily"]["precipitation_hours"]
     wind_direc_daily = data_daily["daily"]["winddirection_10m_dominant"]
 
@@ -127,7 +117,20 @@ for i in range(len(df_daily["daily"]["sunset"])):
     sunsetchanged.append(nouv_h_format)
 sunrisechanged = []
 for i in range(len(df_daily["daily"]["sunrise"])):
-    sunrisechanged.append(df_daily["daily"]["sunrise"][i][-5:])
+    # On prend les heures de lever de soleil
+    h = f'{df_daily["daily"]["sunrise"][i][-5:]}'
+    
+    # On les convertis en objet datetime
+    heure_objet = datetime.strptime(h, "%H:%M")
+
+    # On y ajoute une heure
+    nouvelle_heure = heure_objet + timedelta(hours=1)
+
+    # On convertit la nouvelle heure en format "hh:mm"
+    nouv_h_format = nouvelle_heure.strftime("%H:%M")
+
+    # On les remet dans la liste, mais changés
+    sunrisechanged.append(nouv_h_format)
 ```
 
 ```{python}
@@ -136,7 +139,7 @@ Hourly data
 """
 
 # Extraction API hourly data
-url_hourly = "https://api.open-meteo.com/v1/forecast?latitude=43.6109&longitude=3.8763&hourly=temperature_2m,windspeed_10m&timezone=Europe%2FLondon"
+url_hourly = "https://api.open-meteo.com/v1/meteofrance?latitude=43.6109&longitude=3.8763&hourly=temperature_2m,windspeed_10m&timezone=Europe%2FLondon"
 response_hourly = requests.get(url_hourly)
 
 # Vérification de l'url
@@ -160,7 +163,7 @@ if response_hourly.status_code == 200:
 
     def average_wind_daily():
         vent_moy = []
-        for i in range(7):
+        for i in range(4):
             x = len(sub_lists[i])
             if (
                 sub_lists[i] == None
@@ -212,7 +215,6 @@ vent_moy = average_wind_daily() # Lsite des vents moyens par jour sur les 7 proc
 """
 Tableau en html des données en ce moment
 """
-from IPython.display import HTML
 
 tablenow = f"""
 <table>
@@ -228,7 +230,13 @@ tablenow = f"""
     <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_now)]['image']}><br>{descriptions[str(wmo_now)]['description']}</td>
     <td style="text-align: center; vertical-align: middle;">{temp_now}°C</td>
     <td style="text-align: center; vertical-align: middle;">{precip_now}mm</td>
-    <td style="text-align: center; vertical-align: middle;">{wind_now}kh/h</td>
+    <td style="text-align: center; vertical-align: middle;">{wind_now}kh/h
+    <br>
+    <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate({wind_direc_now}deg); display: inline-block; margin: 0 auto;">
+        <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
+        </div>
+      </div>
+    </td>
   </tr>
 </table>
 """
@@ -252,16 +260,12 @@ tabledaily = f"""
     <th style="text-align: center;background-color: rgb(240, 240, 240); ">{Date[1]}</th>
     <th style="text-align: center;background-color: rgb(240, 240, 240); ">{Date[2]}</th>
     <th style="text-align: center;background-color: rgb(240, 240, 240); ">{Date[3]}</th>
-    <th style="text-align: center;background-color: rgb(240, 240, 240); ">{Date[4]}</th>
-    <th style="text-align: center;background-color: rgb(240, 240, 240); ">{Date[5]}</th>
   </tr>
     <td style="text-align: center;"><strong>WMO</strong></td>
     <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[0])]['image']}><br>{descriptions[str(wmo_daily[0])]['description']}</td>
     <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[1])]['image']}><br>{descriptions[str(wmo_daily[1])]['description']}</td>
     <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[2])]['image']}><br>{descriptions[str(wmo_daily[2])]['description']}</td>
     <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[3])]['image']}><br>{descriptions[str(wmo_daily[3])]['description']}</td>
-    <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[4])]['image']}><br>{descriptions[str(wmo_daily[4])]['description']}</td>
-    <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[5])]['image']}><br>{descriptions[str(wmo_daily[5])]['description']}</td>
   </tr>
   <tr>
     <td style="text-align: center;"><strong>Température</strong></td>
@@ -269,26 +273,13 @@ tabledaily = f"""
     <td style="text-align: center;">{tempmin[1]}°C-{tempmax[1]}°C</td>
     <td style="text-align: center;">{tempmin[2]}°C-{tempmax[2]}°C</td>
     <td style="text-align: center;">{tempmin[3]}°C-{tempmax[3]}°C</td>
-    <td style="text-align: center;">{tempmin[4]}°C-{tempmax[4]}°C</td>
-    <td style="text-align: center;">{tempmin[5]}°C-{tempmax[5]}°C</td>
-  </tr>
-  <tr>
-    <td style="text-align: center;"><strong>UV</strong></td>
-    <td style="text-align: center;">{uv[0]}</td>
-    <td style="text-align: center;">{uv[1]}</td>
-    <td style="text-align: center;">{uv[2]}</td>
-    <td style="text-align: center;">{uv[3]}</td>
-    <td style="text-align: center;">{uv[4]}</td>
-    <td style="text-align: center;">{uv[5]}</td>
   </tr>
   <tr>
     <td style="text-align: center;"><strong>Précipitations</strong></td>
-    <td style="text-align: center;">{precip_daily_sum[0]}mm<br><img src = "goutte.png"> {precip_proba_daily[0]}%</td>
-    <td style="text-align: center;">{precip_daily_sum[1]}mm<br><img src = "goutte.png"> {precip_proba_daily[1]}%</td>
-    <td style="text-align: center;">{precip_daily_sum[2]}mm<br><img src = "goutte.png"> {precip_proba_daily[2]}%</td>
-    <td style="text-align: center;">{precip_daily_sum[3]}mm<br><img src = "goutte.png"> {precip_proba_daily[3]}%</td>
-    <td style="text-align: center;">{precip_daily_sum[4]}mm<br><img src = "goutte.png"> {precip_proba_daily[4]}%</td>
-    <td style="text-align: center;">{precip_daily_sum[5]}mm<br><img src = "goutte.png"> {precip_proba_daily[5]}%</td>
+    <td style="text-align: center;">{precip_daily_sum[0]}mm<br><img src = "goutte.png"> {precip_hours_daily[0]}h</td>
+    <td style="text-align: center;">{precip_daily_sum[1]}mm<br><img src = "goutte.png"> {precip_hours_daily[1]}h</td>
+    <td style="text-align: center;">{precip_daily_sum[2]}mm<br><img src = "goutte.png"> {precip_hours_daily[2]}h</td>
+    <td style="text-align: center;">{precip_daily_sum[3]}mm<br><img src = "goutte.png"> {precip_hours_daily[3]}h</td>
   </tr>
   <tr>
     <td style="text-align: center;"><strong>Vent</strong></td>
@@ -324,22 +315,6 @@ tabledaily = f"""
         </div>
       </div>
     </td>
-    <td style="text-align: center; vertical-align: middle; ">
-      {vent_moy[4]}km/h
-      <br>
-      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate({wind_direc_daily[4]}deg); display: inline-block; margin: 0 auto;">
-        <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
-        </div>
-      </div>
-    </td>
-    <td style="text-align: center; vertical-align: middle; ">
-      {vent_moy[5]}km/h
-      <br>
-      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate({wind_direc_daily[5]}deg); display: inline-block; margin: 0 auto;">
-        <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
-        </div>
-      </div>
-    </td>
   </tr>
   <tr>
     <td style="text-align: center;"><strong>Lever/Coucher</strong></td>
@@ -347,8 +322,6 @@ tabledaily = f"""
     <td style="text-align: center;">{sunrisechanged[1]} - {sunsetchanged[1]}</td>
     <td style="text-align: center;">{sunrisechanged[2]} - {sunsetchanged[2]}</td>
     <td style="text-align: center;">{sunrisechanged[3]} - {sunsetchanged[3]}</td>
-    <td style="text-align: center;">{sunrisechanged[4]} - {sunsetchanged[4]}</td>
-    <td style="text-align: center;">{sunrisechanged[5]} - {sunsetchanged[5]}</td>
   </tr>
 </table>
 """
