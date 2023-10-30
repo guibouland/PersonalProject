@@ -331,7 +331,7 @@ HTML(tabledaily)
 ```
 
 
-> graphique évolution température et vent 7 prochain jours avec curseur pour se déplacer
+> graphique évolution température et vent 4 prochain jours avec curseur pour se déplacer
 
 
 
