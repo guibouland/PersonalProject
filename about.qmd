@@ -77,7 +77,8 @@ if response_hourly.status_code == 200:
     time_hourly = []
     for i in range(len(df_hourly["hourly"]["time"])):
         time_hourly.append(df_hourly["hourly"]["time"][i][-5:])
-
+else:
+    print("Erreur lors de la récupération des données")
 
 vent_moy = average_wind_daily() # Lsite des vents moyens par jour sur les 7 prochains jours
 ```
@@ -113,7 +114,8 @@ if response_daily.status_code == 200:
     precip_proba_daily = data_daily["daily"]["precipitation_probability_max"]
     precip_hours_daily = data_daily["daily"]["precipitation_hours"]
     wind_direc_daily = data_daily["daily"]["winddirection_10m_dominant"]
-
+else:
+    print("Erreur lors de la récupération des données")
 # Initialisation des dates
 Date = pd.to_datetime(data_daily["daily"]["time"])
 Date = [datetime.strftime(a, "%A %d/%m") for a in Date]
@@ -188,7 +190,8 @@ if response_hourly.status_code == 200:
     time_hourly = []
     for i in range(len(df_hourly["hourly"]["time"])):
         time_hourly.append(df_hourly["hourly"]["time"][i][-5:])
-
+else:
+    print("Erreur lors de la récupération des données")
 
 vent_moy = average_wind_daily() # Lsite des vents moyens par jour sur les 7 prochains jours
 ```

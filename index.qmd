@@ -60,6 +60,10 @@ if response_current.status_code == 200:
     strwmonow = f"{wmo_now}"
     wind_now = data_current["current"]["windspeed_10m"]
     wind_direc_now = data_current["current"]["winddirection_10m"]
+    hour_now = data_current["current"]["time"][-5:]
+else:
+  print("Erreur lors de la récupération des données")
+
 
 ```
 
@@ -92,6 +96,9 @@ if response_daily.status_code == 200:
     precip_daily_sum = data_daily["daily"]["precipitation_sum"]
     precip_hours_daily = data_daily["daily"]["precipitation_hours"]
     wind_direc_daily = data_daily["daily"]["winddirection_10m_dominant"]
+else:
+  print("Erreur lors d ela récupération des données")
+
 
 # Initialisation des dates
 Date = pd.to_datetime(data_daily["daily"]["time"])
@@ -179,7 +186,8 @@ if response_hourly.status_code == 200:
     time_hourly = []
     for i in range(len(df_hourly["hourly"]["time"])):
         time_hourly.append(df_hourly["hourly"]["time"][i][-5:])
-
+else:
+  print("Erreur lors de la récupération des données")    
 
 vent_moy = average_wind_daily() # Lsite des vents moyens par jour sur les 7 prochains jours
 ```
@@ -226,7 +234,7 @@ tablenow = f"""
     <th style="text-align: center;">Vent</th>
   </tr>
   <tr>
-    <td style="text-align: center; vertical-align: middle;">{Date[0]}</td>
+    <td style="text-align: center; vertical-align: middle;">{Date[0]}<br><strong>{hour_now}</strong></td>
     <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_now)]['image']}><br>{descriptions[str(wmo_now)]['description']}</td>
     <td style="text-align: center; vertical-align: middle;">{temp_now}°C</td>
     <td style="text-align: center; vertical-align: middle;">{precip_now}mm</td>
