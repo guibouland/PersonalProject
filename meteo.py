@@ -31,9 +31,7 @@ if response_daily.status_code == 200:
     wmo_daily = data_daily["daily"]["weathercode"]
     sunrise = data_daily["daily"]["sunrise"]
     sunset = data_daily["daily"]["sunset"]
-    uv = data_daily["daily"]["uv_index_max"]
     precip_daily_sum = data_daily["daily"]["precipitation_sum"]
-    precip_proba_daily = data_daily["daily"]["precipitation_probability_max"]
     precip_hours_daily = data_daily["daily"]["precipitation_hours"]
     wind_direc_daily = data_daily["daily"]["winddirection_10m_dominant"]
 
@@ -64,6 +62,7 @@ if response_hourly.status_code == 200:
 
     # Calcul vent moyen par jour sur les 7 prochain jour
     size = 24
+    # On crée 7 sous-listes de taille 24 contenant les valeurs des 24 heures par jours, fois 7
     sub_lists = [
         wind_hourly[idx : idx + size] for idx in range(0, len(wind_hourly), size)
     ]
@@ -71,25 +70,20 @@ if response_hourly.status_code == 200:
     def average_wind_daily():
         vent_moy = []
         for i in range(7):
-            x = len(sub_lists[i])
-            if (
-                sub_lists[i] == None
-            ):  # Si il y a pas de donnée dans une des sous-listes, on la passe
-                x = len(sub_lists[i]) - 1
-                continue
-            xmoy = sum(sub_lists[i]) / x
+            for j in sub_lists[i]:
+                if j == None:
+                    # On retire les éléments de chaque sous listes qui ne sont pas conformes ("None")
+                    del sub_lists[i][j]
+            # On calcule la moyenne de chaque sous-listes en prenant compte des changements s'il y a un manque de donnée (le len diminue)
+            xmoy = sum(sub_lists[i]) / len(sub_lists[i])
+            # On ajoute chaque moy à une nouvelle liste qui donnera les vents moyens
             vent_moy.append(round(xmoy, 2))
         return vent_moy
-
-    # Vent moyen par jour sur les 7 jours
-    # print(average_wind_daily())
 
     # Changement écriture time (on enlève les dates avant les heures)
     time_hourly = []
     for i in range(len(df_hourly["hourly"]["time"])):
         time_hourly.append(df_hourly["hourly"]["time"][i][-5:])
-
-    # print(time_hourly)
 
 vent_moy = average_wind_daily()
 print(vent_moy)
@@ -123,31 +117,7 @@ if response_current.status_code == 200:
     wind_now = data_current["current"]["windspeed_10m"]
     wind_direc_now = data_current["current"]["winddirection_10m"]
 
-url_daily = "https://api.open-meteo.com/v1/meteofrance?latitude=43.6109&longitude=3.8763&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_sum,precipitation_hours,precipitation_probability_max,winddirection_10m_dominant&timezone=Europe%2FLondon"
-response_daily = requests.get(url_daily)
 
-# Vérification requête
-if response_daily.status_code == 200:
-    data_daily = response_daily.json()
-    # Création Dataframe daily
-    df_daily = pd.DataFrame(data_daily)
-    print(df_daily.iloc[:, -1])
-
-    pd.set_option("display.max_rows", None)
-
-    # Création du csv associé
-    df_daily.to_csv("df_daily.csv", index=False)
-
-    # Extraction des données
-    tempmax = data_daily["daily"]["temperature_2m_max"]
-    tempmin = data_daily["daily"]["temperature_2m_min"]
-    wmo_daily = data_daily["daily"]["weathercode"]
-    sunrise = data_daily["daily"]["sunrise"]
-    sunset = data_daily["daily"]["sunset"]
-    precip_daily_sum = data_daily["daily"]["precipitation_sum"]
-    precip_proba_daily = data_daily["daily"]["precipitation_probability_max"]
-    precip_hours_daily = data_daily["daily"]["precipitation_hours"]
-    wind_direc_daily = data_daily["daily"]["winddirection_10m_dominant"]
 # %%
 """
 URL des images WMO codes

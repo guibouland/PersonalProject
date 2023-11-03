@@ -57,14 +57,20 @@ if response_current.status_code == 200:
     temp_now = data_current["current"]["temperature_2m"]
     precip_now = data_current["current"]["precipitation"]
     wmo_now = data_current["current"]["weathercode"]
-    strwmonow = f"{wmo_now}"
     wind_now = data_current["current"]["windspeed_10m"]
     wind_direc_now = data_current["current"]["winddirection_10m"]
     hour_now = data_current["current"]["time"][-5:]
 else:
   print("Erreur lors de la récupération des données")
 
-
+# On change "hour_now" en raison du décalage
+h = hour_now
+# On les convertis en objet datetime
+heure_objet = datetime.strptime(h, "%H:%M")
+# On y ajoute une heure
+nouvelle_heure = heure_objet + timedelta(hours=1)
+# On convertit la nouvelle heure en format "hh:mm"
+hour_now_changed = nouvelle_heure.strftime("%H:%M")
 ```
 
 ```{python}
@@ -171,13 +177,13 @@ if response_hourly.status_code == 200:
     def average_wind_daily():
         vent_moy = []
         for i in range(4):
-            x = len(sub_lists[i])
-            if (
-                sub_lists[i] == None
-            ):  # Si il y a pas de donnée dans une des sous-listes, on la passe
-                x = len(sub_lists[i]) - 1
-                continue
-            xmoy = sum(sub_lists[i]) / x
+            for j in sub_lists[i]:
+                if j == None:
+                    # On retire les éléments de chaque sous listes qui ne sont pas conformes ("None")
+                    del sub_lists[i][j]
+            # On calcule la moyenne de chaque sous-listes en prenant compte des changements s'il y a un manque de donnée (le len diminue)
+            xmoy = sum(sub_lists[i]) / len(sub_lists[i])
+            # On ajoute chaque moy à une nouvelle liste qui donnera les vents moyens
             vent_moy.append(round(xmoy, 2))
         return vent_moy
 
@@ -194,14 +200,13 @@ vent_moy = average_wind_daily() # Lsite des vents moyens par jour sur les 7 proc
 # EN CE MOMENT
 
 ```{python}
-#
 #Voici un essai à la main
-#
+
 #from IPython.display import Markdown, display
 #init=""
 #A = init + f"![{descriptions[str(wmo_now)]['description']}]({descriptions[str(wmo_now)]['image']})"
 #display(Markdown(A))
-#
+
 ##Essai tableau en ligne
 #a = "|" + f"{date_now}|"
 #b = init + f"![{descriptions[str(wmo_now)]['description']}]({descriptions[str(wmo_now)]['image']})|"
@@ -234,7 +239,7 @@ tablenow = f"""
     <th style="text-align: center;">Vent</th>
   </tr>
   <tr>
-    <td style="text-align: center; vertical-align: middle;">{Date[0]}<br><strong>{hour_now}</strong></td>
+    <td style="text-align: center; vertical-align: middle;">{Date[0]}<br><strong>{hour_now_changed}</strong></td>
     <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_now)]['image']}><br>{descriptions[str(wmo_now)]['description']}</td>
     <td style="text-align: center; vertical-align: middle;">{temp_now}°C</td>
     <td style="text-align: center; vertical-align: middle;">{precip_now}mm</td>

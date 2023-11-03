@@ -62,13 +62,13 @@ if response_hourly.status_code == 200:
     def average_wind_daily():
         vent_moy = []
         for i in range(7):
-            x = len(sub_lists[i])
-            if (
-                sub_lists[i] == None
-            ):  # Si il y a pas de donnée dans une des sous-listes, on la passe
-                x = len(sub_lists[i]) - 1
-                continue
-            xmoy = sum(sub_lists[i]) / x
+            for j in sub_lists[i]:
+                if j == None:
+                    # On retire les éléments de chaque sous listes qui ne sont pas conformes ("None")
+                    del sub_lists[i][j]
+            # On calcule la moyenne de chaque sous-listes en prenant compte des changements s'il y a un manque de donnée (le len diminue)
+            xmoy = sum(sub_lists[i]) / len(sub_lists[i])
+            # On ajoute chaque moy à une nouvelle liste qui donnera les vents moyens
             vent_moy.append(round(xmoy, 2))
         return vent_moy
 
