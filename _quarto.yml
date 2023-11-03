@@ -6,21 +6,21 @@ project:
     - about.qmd
 
 website:
-  title: "Météo"
+  title: "Weather in Montpellier"
   page-navigation: true
-  repo-url: https://github.com/guibouland/ProjetGroupe
+  repo-url: https://github.com/guibouland/PersonalProject
   repo-actions: [source, issue]
   
   navbar:
     tools: 
       - icon: github
-        href: https://github.com/guibouland/ProjetGroupe
+        href: https://github.com/guibouland/PersonalProject
         text: GitHub
     left:
       - href: index.qmd
-        text: Accueil
+        text: Home
       - href: about.qmd
-        text: En savoir plus
+        text: Learn More
       
 
         
