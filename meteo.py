@@ -37,7 +37,8 @@ if response_daily.status_code == 200:
 
 Date = pd.to_datetime(data_daily["daily"]["time"])
 Date = [datetime.datetime.strftime(a, "%A %d/%m") for a in Date]
-print(Date)
+print(Date[1][:-5])
+print(Date[0][-5:])
 # %%
 """
 Hourly data
