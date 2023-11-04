@@ -4,13 +4,27 @@
     "href": "about.html",
     "title": "LEARN MORE",
     "section": "",
-    "text": "Here’s a table forecasting the 6 following days. However, the data doesn’t come form MeteoFrance but from the general “Weather Forecast” tab in the website.\n\n\n\n\n\n  \n     \n    Saturday 04/11\n    Sunday 05/11\n    Monday 06/11\n    Tuesday 07/11\n    Wednesday 08/11\n    Thursday 09/11\n  \n    WMO\n    Light Showers\n    Partly Cloudy\n    Light Showers\n    Cloudy\n    Cloudy\n    Light Rain\n  \n  \n    Temperature\n    9.1°C-12.0°C\n    8.9°C-16.9°C\n    7.8°C-16.1°C\n    6.7°C-14.9°C\n    6.2°C-15.4°C\n    6.0°C-15.8°C\n  \n  \n    UV\n    0.95\n    3.1\n    3.05\n    2.95\n    2.55\n    2.05\n  \n  \n    Precipitations\n    7.1mm 97%\n    0.0mm 10%\n    0.0mm 42%\n    0.0mm 6%\n    0.0mm 3%\n    0.3mm 16%\n  \n  \n    Wind\n    \n      7.47km/h\n      \n      \n        \n        \n      \n    \n    \n      10.29km/h\n      \n      \n        \n        \n      \n    \n    \n      6.04km/h\n      \n      \n        \n        \n      \n    \n    \n      6.68km/h\n      \n      \n        \n        \n      \n    \n    \n      5.02km/h\n      \n      \n        \n        \n      \n    \n    \n      7.03km/h\n      \n      \n        \n        \n      \n    \n  \n  \n    Sunrise/Sunset\n    07:23 - 17:32\n    07:25 - 17:31\n    07:26 - 17:29\n    07:27 - 17:28\n    07:29 - 17:27\n    07:30 - 17:26"
+    "text": "Welcome to our “Weather Forecast in Montpellier” website. You can find in the Home page two tables made using an HMTL function in the IPython.display module, tou can see the source code here. We request the API URL with the desired parameters from the open-meteo website and extract the data to make a table that displays the information we are seeking."
+  },
+  {
+    "objectID": "about.html#methodology",
+    "href": "about.html#methodology",
+    "title": "LEARN MORE",
+    "section": "",
+    "text": "Welcome to our “Weather Forecast in Montpellier” website. You can find in the Home page two tables made using an HMTL function in the IPython.display module, tou can see the source code here. We request the API URL with the desired parameters from the open-meteo website and extract the data to make a table that displays the information we are seeking."
+  },
+  {
+    "objectID": "about.html#bonus",
+    "href": "about.html#bonus",
+    "title": "LEARN MORE",
+    "section": "Bonus",
+    "text": "Bonus\nHere’s a table forecasting the 6 following days. However, the data doesn’t come form MeteoFrance but from the general “Weather Forecast” tab in the website.\n\n\n\n\n\n  \n     \n    Saturday 04/11\n    Sunday 05/11\n    Monday 06/11\n    Tuesday 07/11\n    Wednesday 08/11\n    Thursday 09/11\n  \n    WMO\n    Light Showers\n    Partly Cloudy\n    Light Showers\n    Cloudy\n    Cloudy\n    Light Rain\n  \n  \n    Temperature\n    9.1°C-12.0°C\n    8.9°C-16.9°C\n    7.8°C-16.0°C\n    6.9°C-14.9°C\n    6.9°C-14.7°C\n    6.7°C-14.0°C\n  \n  \n    UV\n    0.95\n    3.1\n    3.05\n    2.95\n    2.55\n    2.05\n  \n  \n    Precipitations\n    7.1mm 97%\n    0.0mm 10%\n    0.0mm 42%\n    0.0mm 6%\n    0.0mm 3%\n    1.5mm 16%\n  \n  \n    Wind\n    \n      7.47km/h\n      \n      \n        \n        \n      \n    \n    \n      10.29km/h\n      \n      \n        \n        \n      \n    \n    \n      5.62km/h\n      \n      \n        \n        \n      \n    \n    \n      6.43km/h\n      \n      \n        \n        \n      \n    \n    \n      4.26km/h\n      \n      \n        \n        \n      \n    \n    \n      8.45km/h\n      \n      \n        \n        \n      \n    \n  \n  \n    Sunrise/Sunset\n    07:23 - 17:32\n    07:25 - 17:31\n    07:26 - 17:29\n    07:27 - 17:28\n    07:29 - 17:27\n    07:30 - 17:26"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "CURRENTLY",
     "section": "",
-    "text": "Date\nWMO\nTemperature\nPrecipitation\nWind\n\n\nSaturday 04/11\n16:00\n\nCloudy\n14.0 °C\n0.0 mm\n12.1 km/h\n\n\n\n\n\n\n\n\n\n\n\n\nFORECAST\n\n\n\n\n\n  \n     \n    Saturday 04/11\n    Sunday 05/11\n    Monday 06/11\n    Tuesday 07/11\n  \n    WMO\n    Drizzle\n    Cloudy\n    Drizzle\n    Partly Cloudy\n  \n  \n    Temperature\n    8.4°C-15.8°C\n    8.1°C-17.8°C\n    7.0°C-14.8°C\n    5.0°C-14.4°C\n  \n  \n    Precipitations\n    2.5mm 9.0h\n    0.0mm 0.0h\n    1.7mm 5.0h\n    0.0mm 0.0h\n  \n  \n    Wind\n    \n      8.98km/h\n      \n      \n        \n        \n      \n    \n    \n      17.27km/h\n      \n      \n        \n        \n      \n    \n    \n      10.18km/h\n      \n      \n        \n        \n      \n    \n    \n      9.91km/h\n      \n      \n        \n        \n      \n    \n  \n  \n    Sunrise/Sunset\n    07:23 - 17:32\n    07:25 - 17:31\n    07:26 - 17:29\n    07:27 - 17:28\n  \n\n\n\n\ngraphique évolution température et vent 4 prochain jours avec curseur pour se déplacer"
+    "text": "Date\nWMO\nTemperature\nPrecipitation\nWind\n\n\nSaturday 04/11\n16:45\n\nCloudy\n13.1 °C\n0.0 mm\n13.8 km/h\n\n\n\n\n\n\n\n\n\n\n\n\nFORECAST\n\n\n\n\n\n  \n     \n    Saturday 04/11\n    Sunday 05/11\n    Monday 06/11\n    Tuesday 07/11\n  \n    WMO\n    Drizzle\n    Cloudy\n    Heavy Drizzle\n    Cloudy\n  \n  \n    Temperature\n    8.4°C-15.4°C\n    8.5°C-17.5°C\n    7.6°C-15.3°C\n    5.1°C-14.3°C\n  \n  \n    Precipitations\n    2.5mm 9.0h\n    0.0mm 0.0h\n    2.8mm 6.0h\n    0.0mm 0.0h\n  \n  \n    Wind\n    \n      9.39km/h\n      \n      \n        \n        \n      \n    \n    \n      16.35km/h\n      \n      \n        \n        \n      \n    \n    \n      10.91km/h\n      \n      \n        \n        \n      \n    \n    \n      9.58km/h\n      \n      \n        \n        \n      \n    \n  \n  \n    Sunrise/Sunset\n    07:23 - 17:32\n    07:25 - 17:31\n    07:26 - 17:29\n    07:27 - 17:28\n  \n\n\n\n\ngraphique évolution température et vent 4 prochain jours avec curseur pour se déplacer"
   }
 ]
