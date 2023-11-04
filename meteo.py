@@ -37,7 +37,7 @@ if response_daily.status_code == 200:
     wind_direc_daily = data_daily["daily"]["winddirection_10m_dominant"]
 
 Date = pd.to_datetime(data_daily["daily"]["time"])
-Date = [datetime.datetime.strftime(a, "%A %d/%m") for a in Date]
+Date = [datetime.strftime(a, "%A %d/%m") for a in Date]
 print(Date[1][:-5])
 print(Date[0][-5:])
 # %%
@@ -485,6 +485,60 @@ tabledaily = f"""
 HTML(tabledaily)
 
 # %%
+"""
+ABOUT
+"""
+"""
+Hourly data
+"""
+
+# Hourly data API extraction
+url_hourly = "https://api.open-meteo.com/v1/forecast?latitude=43.6109&longitude=3.8763&hourly=temperature_2m,windspeed_10m&timezone=Europe%2FLondon"
+response_hourly = requests.get(url_hourly)
+
+# URL verification
+if response_hourly.status_code == 200:
+    data_hourly = response_hourly.json()
+    # Hourly dataframe creation
+    df_hourly = pd.DataFrame(data_hourly)
+
+    # Associated CSV file creation
+    df_hourly.to_csv("df_hourly.csv", index=False)
+
+    # Hourly data extraction
+    temp_hourly = data_hourly["hourly"]["temperature_2m"]
+    wind_hourly = data_hourly["hourly"]["windspeed_10m"]
+
+    # We calculate the mean wind for the next 7 days
+    size = 24
+    # We create 7 sub-lists that each contains 24 different values (1 per hour)
+    sub_lists = [
+        wind_hourly[idx : idx + size] for idx in range(0, len(wind_hourly), size)
+    ]
+
+    # We create the function to calculate the mean of each sub-list
+    def average_wind_daily():
+        vent_moy = []
+        for i in range(7):
+            for j in sub_lists[i]:
+                if j == None:
+                    # We delete the "None" type objects elements from each sub-lists
+                    del sub_lists[i][j]
+            # We calculate the mean of each sub-list considering the changes if there was any None (len diminishes if that's the case)
+            xmoy = sum(sub_lists[i]) / len(sub_lists[i])
+            # We append each mean to a list that will contains all the means
+            vent_moy.append(round(xmoy, 2))
+        return vent_moy
+
+    # Extraction of the hours (ignoring the date of the day)
+    time_hourly = []
+    for i in range(len(df_hourly["hourly"]["time"])):
+        time_hourly.append(df_hourly["hourly"]["time"][i][-5:])
+else:
+    print("Data retrieval error")
+
+vent_moy = average_wind_daily()  # List of the mean winds for the next 7 days
+
 
 """
 DATA DAILY
@@ -674,3 +728,22 @@ tabledaily = f"""
 
 # HTML table rendering
 HTML(tabledaily)
+
+
+# %%
+# Essai de filtre pour None type objects
+
+x = None
+lis = [x, 2]
+lis = [i for i in lis if i is not None]
+print(lis)
+
+x = None
+l = [x, 2]
+clean = list(filter(lambda x: x is not None, l))
+print(clean)
+
+l = [x, 2]
+while None in lis:
+    lis.remove(None)
+print(lis)

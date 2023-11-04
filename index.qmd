@@ -181,10 +181,8 @@ if response_hourly.status_code == 200:
     def average_wind_daily():
         vent_moy = []
         for i in range(4):
-            for j in sub_lists[i]:
-                if j == None:
-                    # We delete the "None" type objects elements from each sub-lists
-                    del sub_lists[i][j]
+          # We delete the None type object from mismeasurement from the lists
+            sub_lists[i] = [j for j in sub_lists[i] if j is not None]
             # We calculate the mean of each sub-list considering the changes if there was any None (len diminishes if that's the case)
             xmoy = sum(sub_lists[i]) / len(sub_lists[i])
             # We append each mean to a list that will contains all the means
