@@ -1,5 +1,10 @@
 # LEARN MORE
 
+## Methodology
+Welcome to our "Weather Forecast in Montpellier" website. You can find in the [Home](index.qmd) page two tables made using an HMTL function in the *IPython.display* module, tou can see the source code [here](https://github.com/guibouland/PersonalProject/blob/main/index.qmd). We request the API URL with the desired parameters from the [open-meteo website](https://open-meteo.com/en/docs/meteofrance-api) and extract the data to make a table that displays the information we are seeking.
+
+
+## Bonus
 Here's a table forecasting the 6 following days. However, the data doesn't come form MeteoFrance but from the general "Weather Forecast" tab in the [website](https://open-meteo.com/en/docs).
 
 ```{python}
