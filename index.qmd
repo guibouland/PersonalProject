@@ -7,8 +7,8 @@ import pandas as pd
 import requests
 import json
 import csv
-from datetime import datetime, timedelta
-from IPython.display import HTML
+from datetime import datetime, timedelta, date
+from IPython.display import HTML, display
 ```
 
 ```{python}
@@ -31,6 +31,11 @@ def image_url(code_wmo):
     else:
         return "WMO code not found"
 
+# Date update for the URLs
+start_date = date.today()
+end_date = start_date + timedelta(4) # We use the timedelta class to "add" 4 days to obtain the date in 5 days from today
+start_date = start_date.isoformat() # We change its format to iso
+end_date = end_date.isoformat()
 ```
 
 ```{python}
@@ -82,7 +87,7 @@ DATA DAILY
 """
 
 # Daily data API extraction
-url_daily = "https://api.open-meteo.com/v1/meteofrance?latitude=43.6109&longitude=3.8763&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,precipitation_hours,winddirection_10m_dominant&timezone=Europe%2FLondon"
+url_daily = f"https://api.open-meteo.com/v1/meteofrance?latitude=43.6109&longitude=3.8763&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,precipitation_hours,winddirection_10m_dominant&timezone=Europe%2FLondon&start_date={start_date}&end_date={end_date}"
 response_daily = requests.get(url_daily)
 
 # Request verification
@@ -146,6 +151,11 @@ for i in range(len(df_daily["daily"]["sunrise"])):
 
     # We put the changed hours in the list
     sunrisechanged.append(nouv_h_format)
+
+# We change the None objects to "-"
+for i in range(len(precip_daily_sum)):
+    if precip_daily_sum[i] == None:
+        precip_daily_sum[i] = "- "
 ```
 
 ```{python}
@@ -154,7 +164,7 @@ Hourly data
 """
 
 # Hourly data API extraction
-url_hourly = "https://api.open-meteo.com/v1/meteofrance?latitude=43.6109&longitude=3.8763&hourly=temperature_2m,windspeed_10m&timezone=Europe%2FLondon"
+url_hourly = f"https://api.open-meteo.com/v1/meteofrance?latitude=43.6109&longitude=3.8763&hourly=temperature_2m,windspeed_10m&timezone=Europe%2FLondon&start_date={start_date}&end_date={end_date}"
 response_hourly = requests.get(url_hourly)
 
 # URL verification
@@ -170,9 +180,9 @@ if response_hourly.status_code == 200:
     temp_hourly = data_hourly["hourly"]["temperature_2m"]
     wind_hourly = data_hourly["hourly"]["windspeed_10m"]
 
-    # We calculate the mean wind for the next 4 days
+    # We calculate the mean wind for the next 5 days
     size = 24
-    # We create 4 sub-lists that each contains 24 different values (1 per hour)
+    # We create 5 sub-lists that each contains 24 different values (1 per hour)
     sub_lists = [
         wind_hourly[idx : idx + size] for idx in range(0, len(wind_hourly), size)
     ]
@@ -180,7 +190,7 @@ if response_hourly.status_code == 200:
     # We create the function to calculate the mean of each sub-list
     def average_wind_daily():
         vent_moy = []
-        for i in range(4):
+        for i in range(5):
           # We delete the None type object from mismeasurement from the lists
             sub_lists[i] = [j for j in sub_lists[i] if j is not None]
             # We calculate the mean of each sub-list considering the changes if there was any None (len diminishes if that's the case)
@@ -196,7 +206,7 @@ if response_hourly.status_code == 200:
 else:
     print("Data retrieval error")
 
-vent_moy = average_wind_daily()  # List of the mean winds for the next 4 days
+vent_moy = average_wind_daily()  # List of the mean winds for the next 5 days
 ```
 # CURRENTLY
 
@@ -231,7 +241,7 @@ tablenow = f"""
 """
 
 # HTML table rendering
-HTML(tablenow)
+display(HTML(tablenow))
 ```
 
 # FORECAST
@@ -242,37 +252,36 @@ HTML table of DAILY FORECAST
 """
 
 tabledaily = f"""
-<table style="margin: 0 auto;">
+<table style="margin: 0 auto; position: relative; width: 60px; height: 60px; text-align: center; vertical-align: middle;">
   <tr>
-    <th style ="background-color: rgb(240, 240, 240);"></th> 
-    <th style="text-align: center;background-color: rgb(240, 240, 240); ">{Date[0][:-5]}<br>{Date[0][-5:]}</th>
-    <th style="text-align: center;background-color: rgb(240, 240, 240); ">{Date[1][:-5]}<br>{Date[1][-5:]}</th>
-    <th style="text-align: center;background-color: rgb(240, 240, 240); ">{Date[2][:-5]}<br>{Date[2][-5:]}</th>
-    <th style="text-align: center;background-color: rgb(240, 240, 240); ">{Date[3][:-5]}<br>{Date[3][-5:]}</th>
+    <th style="background-color: rgb(240, 240, 240); ">{Date[0][:-5]}<br>{Date[0][-5:]}</th>
+    <th style="background-color: rgb(240, 240, 240); ">{Date[1][:-5]}<br>{Date[1][-5:]}</th>
+    <th style="background-color: rgb(240, 240, 240); ">{Date[2][:-5]}<br>{Date[2][-5:]}</th>
+    <th style="background-color: rgb(240, 240, 240); ">{Date[3][:-5]}<br>{Date[3][-5:]}</th>
+    <th style="background-color: rgb(240, 240, 240); ">{Date[4][:-5]}<br>{Date[4][-5:]}</th>
   </tr>
-    <td style="text-align: center;"><strong>WMO</strong></td>
-    <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[0])]['image']}><br>{descriptions[str(wmo_daily[0])]['description']}</td>
-    <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[1])]['image']}><br>{descriptions[str(wmo_daily[1])]['description']}</td>
-    <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[2])]['image']}><br>{descriptions[str(wmo_daily[2])]['description']}</td>
-    <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_daily[3])]['image']}><br>{descriptions[str(wmo_daily[3])]['description']}</td>
-  </tr>
-  <tr>
-    <td style="text-align: center;"><strong>Temperature</strong></td>
-    <td style="text-align: center;">{tempmin[0]}°C-{tempmax[0]}°C</td>
-    <td style="text-align: center;">{tempmin[1]}°C-{tempmax[1]}°C</td>
-    <td style="text-align: center;">{tempmin[2]}°C-{tempmax[2]}°C</td>
-    <td style="text-align: center;">{tempmin[3]}°C-{tempmax[3]}°C</td>
+    <td style="background-color: rgb(210,235,242);"><img src ={descriptions[str(wmo_daily[0])]['image']}><br>{descriptions[str(wmo_daily[0])]['description']}</td>
+    <td style="background-color: rgb(210,235,242);"><img src ={descriptions[str(wmo_daily[1])]['image']}><br>{descriptions[str(wmo_daily[1])]['description']}</td>
+    <td style="background-color: rgb(210,235,242);"><img src ={descriptions[str(wmo_daily[2])]['image']}><br>{descriptions[str(wmo_daily[2])]['description']}</td>
+    <td style="background-color: rgb(210,235,242);"><img src ={descriptions[str(wmo_daily[3])]['image']}><br>{descriptions[str(wmo_daily[3])]['description']}</td>
+    <td style="background-color: rgb(210,235,242);"><img src ={descriptions[str(wmo_daily[4])]['image']}><br>{descriptions[str(wmo_daily[4])]['description']}</td>
   </tr>
   <tr>
-    <td style="text-align: center;"><strong>Precipitations</strong></td>
-    <td style="text-align: center;">{precip_daily_sum[0]}mm<br><img src = "goutte.png"> {precip_hours_daily[0]}h</td>
-    <td style="text-align: center;">{precip_daily_sum[1]}mm<br><img src = "goutte.png"> {precip_hours_daily[1]}h</td>
-    <td style="text-align: center;">{precip_daily_sum[2]}mm<br><img src = "goutte.png"> {precip_hours_daily[2]}h</td>
-    <td style="text-align: center;">{precip_daily_sum[3]}mm<br><img src = "goutte.png"> {precip_hours_daily[3]}h</td>
+    <td>{tempmin[0]}°C-{tempmax[0]}°C</td>
+    <td>{tempmin[1]}°C-{tempmax[1]}°C</td>
+    <td>{tempmin[2]}°C-{tempmax[2]}°C</td>
+    <td>{tempmin[3]}°C-{tempmax[3]}°C</td>
+    <td>{tempmin[4]}°C-{tempmax[4]}°C</td>
   </tr>
   <tr>
-    <td style="text-align: center;"><strong>Wind</strong></td>
-    <td style="text-align: center; vertical-align: middle; ">
+    <td>{precip_daily_sum[0]}mm<br><img src = "goutte.png"> {precip_hours_daily[0]}h</td>
+    <td>{precip_daily_sum[1]}mm<br><img src = "goutte.png"> {precip_hours_daily[1]}h</td>
+    <td>{precip_daily_sum[2]}mm<br><img src = "goutte.png"> {precip_hours_daily[2]}h</td>
+    <td>{precip_daily_sum[3]}mm<br><img src = "goutte.png"> {precip_hours_daily[3]}h</td>
+    <td>{precip_daily_sum[4]}mm<br><img src = "goutte.png"> {precip_hours_daily[4]}h</td>
+  </tr>
+  <tr>
+    <td>
       {vent_moy[0]}km/h
       <br>
       <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate({wind_direc_daily[0]}deg); display: inline-block; margin: 0 auto;">
@@ -280,7 +289,7 @@ tabledaily = f"""
         </div>
       </div>
     </td>
-    <td style="text-align: center; vertical-align: middle; ">
+    <td>
       {vent_moy[1]}km/h
       <br>
       <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate({wind_direc_daily[1]}deg); display: inline-block; margin: 0 auto;">
@@ -288,7 +297,7 @@ tabledaily = f"""
         </div>
       </div>
     </td>
-    <td style="text-align: center; vertical-align: middle; ">
+    <td>
       {vent_moy[2]}km/h
       <br>
       <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate({wind_direc_daily[2]}deg); display: inline-block; margin: 0 auto;">
@@ -296,7 +305,7 @@ tabledaily = f"""
         </div>
       </div>
     </td>
-    <td style="text-align: center; vertical-align: middle; ">
+    <td>
       {vent_moy[3]}km/h
       <br>
       <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate({wind_direc_daily[3]}deg); display: inline-block; margin: 0 auto;">
@@ -304,23 +313,30 @@ tabledaily = f"""
         </div>
       </div>
     </td>
+    <td>
+      {vent_moy[4]}km/h
+      <br>
+      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate({wind_direc_daily[4]}deg); display: inline-block; margin: 0 auto;">
+        <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
+        </div>
+      </div>
+    </td>
   </tr>
   <tr>
-    <td style="text-align: center;"><strong>Sunrise/Sunset</strong></td>
-    <td style="text-align: center;">{sunrisechanged[0]} - {sunsetchanged[0]}</td>
-    <td style="text-align: center;">{sunrisechanged[1]} - {sunsetchanged[1]}</td>
-    <td style="text-align: center;">{sunrisechanged[2]} - {sunsetchanged[2]}</td>
-    <td style="text-align: center;">{sunrisechanged[3]} - {sunsetchanged[3]}</td>
+    <td>{sunrisechanged[0]} - {sunsetchanged[0]}</td>
+    <td>{sunrisechanged[1]} - {sunsetchanged[1]}</td>
+    <td>{sunrisechanged[2]} - {sunsetchanged[2]}</td>
+    <td>{sunrisechanged[3]} - {sunsetchanged[3]}</td>
+    <td>{sunrisechanged[4]} - {sunsetchanged[4]}</td>
   </tr>
 </table>
 """
 
 # HTML table rendering
-HTML(tabledaily)
+display(HTML(tabledaily))
 ```
 
 
-> graphique évolution température et vent 4 prochain jours avec curseur pour se déplacer
 
 
 

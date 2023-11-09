@@ -2,7 +2,7 @@ import pandas as pd
 import requests
 import json
 import csv
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from IPython.display import HTML
 
 
@@ -747,3 +747,8 @@ l = [x, 2]
 while None in lis:
     lis.remove(None)
 print(lis)
+
+# %%
+
+start_date = str(date.today())
+print(start_date)
