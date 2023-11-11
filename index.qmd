@@ -219,7 +219,7 @@ if response_hourly.status_code == 200:
         for i in range(5):
             sub_lists[i] = [j for j in sub_lists[i] if j is not None]
             if len(sub_lists[i]) == 0:
-                xmoy = "- "vent_moy.append(round(xmoy, 2))
+                xmoy = "- "
                 vent_moy.append(xmoy)
             else:
                 xmoy = sum(sub_lists[i]) / len(sub_lists[i])
