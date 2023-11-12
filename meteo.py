@@ -752,3 +752,20 @@ print(lis)
 
 start_date = str(date.today())
 print(start_date)
+
+
+descriptions[str(wmo_daily[2])]["description"] = "- "
+descriptions[str(wmo_daily[2])]["image"] = "- "
+print(descriptions[str(wmo_daily[2])]["image"])
+
+table = f"""
+<table>
+  <tr>
+    <th>test</th>
+  </tr>
+  <tr>
+    <td><img src ={descriptions[str(wmo_daily[1])]['image']}></td>
+  </tr>
+</table>
+"""
+HTML(table)

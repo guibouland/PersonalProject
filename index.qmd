@@ -160,6 +160,11 @@ for i in range(len(wind_direc_daily)):
     if wind_direc_daily[i] == None:
         wind_direc_daily[i] = "- "
 
+for i in range(len(wmo_daily)):
+    if wmo_daily[i] == None:
+        descriptions[str(wmo_daily[i])]["description"] = "- "
+        descriptions[str(wmo_daily[i])]["image"] = "- "
+
 ```
 
 ```{python}
