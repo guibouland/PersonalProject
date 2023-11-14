@@ -4,14 +4,14 @@
     "href": "about.html",
     "title": "LEARN MORE",
     "section": "",
-    "text": "Welcome to our “Weather Forecast in Montpellier” website. You can find in the Home page two tables made using an HMTL function in the IPython.display module, tou can see the source code here. We request the API URL with the desired parameters from the open-meteo website and extract the data to make a table that displays the information we are seeking."
+    "text": "Welcome to our “Weather Forecast in Montpellier” website. You can find in the Home page two tables made using an HMTL function in the IPython.display module, you can see the source code here. We request the API URL with the desired parameters from the open-meteo website and extract the data to make a table that displays the information we are seeking. The second table displays, in order, the dates, the weather images and their descriptions, the minimal and maximal temperatures, the sums and hours of precipitation, the average winds and their dominant directions a,d the sunrises and sunsets hours."
   },
   {
     "objectID": "about.html#methodology",
     "href": "about.html#methodology",
     "title": "LEARN MORE",
     "section": "",
-    "text": "Welcome to our “Weather Forecast in Montpellier” website. You can find in the Home page two tables made using an HMTL function in the IPython.display module, tou can see the source code here. We request the API URL with the desired parameters from the open-meteo website and extract the data to make a table that displays the information we are seeking."
+    "text": "Welcome to our “Weather Forecast in Montpellier” website. You can find in the Home page two tables made using an HMTL function in the IPython.display module, you can see the source code here. We request the API URL with the desired parameters from the open-meteo website and extract the data to make a table that displays the information we are seeking. The second table displays, in order, the dates, the weather images and their descriptions, the minimal and maximal temperatures, the sums and hours of precipitation, the average winds and their dominant directions a,d the sunrises and sunsets hours."
   },
   {
     "objectID": "about.html#bonus",
