@@ -164,6 +164,12 @@ for i in range(len(wind_direc_daily)):
 #     if wmo_daily[i] == None:
 #         wmo_daily[i] = "- "
 
+# We add 180 degrees to the direction of the wind (because it's false)
+for i in range(len(wind_direc_daily)):
+    if wind_direc_daily[i] == "- ":
+        continue
+    wind_direc_daily[i] = int(wind_direc_daily[i]) + int(180)
+
 ```
 
 ```{python}

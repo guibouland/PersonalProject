@@ -769,3 +769,10 @@ table = f"""
 </table>
 """
 HTML(table)
+
+
+print(type(wind_direc_daily))
+for i in range(len(wind_direc_daily)):
+    print(type(wind_direc_daily[i]))
+    wind_direc_daily[i] = wind_direc_daily[i] + 180
+    print(wind_direc_daily[i])
