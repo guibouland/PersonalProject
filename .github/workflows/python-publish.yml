@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron: "0 0,1,5-23 * * *" # Publish toutes les heures
+    - cron: "0 5-23 * * *" # Publish every hour from 5 to 23
   workflow_dispatch:
   push:
     branches: ["main"]
