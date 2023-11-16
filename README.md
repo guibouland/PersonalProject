@@ -18,7 +18,6 @@ Our website displays two types of tables using HTML in a python cell with the *I
     - *Wind :* Here, the wind is given with its average value of the day, we had to get the hourly data and calculate the mean of each day,
     - *Sunrise/Sunset :* the hour when the Sun rises and sets each day.  
 
-> potential plot
 
 ### Technologies used
 The entirety of this project was coded in Python, with modules you can find in the [requirements.txt](requirements.txt) file (Pandas, Numpy, ...), but also with other built-in modules :  
@@ -32,7 +31,7 @@ The entirety of this project was coded in Python, with modules you can find in t
 ### Challenges and Upgrades
 During the development phase of this project, we faced a fex issues.  
 
-We were somewhat limited regarding the API.  MeteoFrance did not have all the parameters we needed, such as the precipitation probability or UV index, which were found in other forecast data sources (with differences in measurements). The length of the forecast was also a bit short compared to the others that could go to over a week.
+We were somewhat limited regarding the API.  MétéoFrance did not have all the parameters we needed, such as the precipitation probability or UV index, which were found in other forecast data sources (with differences in measurements). The length of the forecast was also a bit short compared to the others that could go to over a week. What we did was to modify manually the API URL to get the fifth day of forecast, but we now face lacks of data from MétéoFrance.
 
 Also, we struggled to come up with a viable solution to display a table coded in a Python cell that could display the images using an URL in Quarto. This resulted in us learning how to create HTML tables with CSS styling (which was beneficial in many ways).
 
@@ -41,7 +40,7 @@ A major problem arose when data was missing because of lack of measurement, thus
 We can, then, wish an improvement in the MeteoFrance API in order to have more daily parameters and an extended forecast length.
 
 ## How to use our Website
-This website contains two main pages. The first one, **Home**, contains an HTML table of the current weather and an HTML table of the forecasted weather for the next 4 days. The second page, **Learn more**, contains an HTML table which doesn't use the MeteoFrance data but generic data that the [website](https://open-meteo.com/en/docs) contains, it shows the forecast for the next 6 days in Montpellier. It also includes a brief description of the methodology used.
+This website contains two main pages. The first one, **"Home"**, contains an HTML table of the current weather and an HTML table of the forecasted weather for the next 4 days. The second page, **"Learn more"**, contains an HTML table which doesn't use the MeteoFrance data but generic data that the [website](https://open-meteo.com/en/docs) contains, it shows the forecast for the next 6 days in Montpellier. It also includes a brief description of the methodology used.
 
 ## Credits
 The purpose of this website was not to be used for commercial purposes, as per the following [terms](https://open-meteo.com/en/terms).
