@@ -265,7 +265,7 @@ tablenow = f"""
     <td style="text-align: center; vertical-align: middle;">{Date[0]}<br><strong>{hour_now_changed}</strong></td>
     <td style="background-color: rgb(210,235,242); text-align: center;"><img src ={descriptions[str(wmo_now)]['image']}><br>{descriptions[str(wmo_now)]['description']}</td>
     <td style="text-align: center; vertical-align: middle;">{temp_now} °C</td>
-    <td style="text-align: center; vertical-align: middle;">{precip_now} mm</td>
+    <td style="text-align: center; vertical-align: middle;"><img src = "goutte.svg" width = 25px height= 25px>{precip_now} mm</td>
     <td style="text-align: center; vertical-align: middle;">{wind_now} km/h
     <br>
     <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate({wind_direc_now}deg); display: inline-block; margin: 0 auto;">
@@ -312,11 +312,11 @@ tabledaily = f"""
     <td style = "text-align: center; ">{tempmin[4]}°C-{tempmax[4]}°C</td>
   </tr>
   <tr>
-    <td style = "text-align: center; ">{precip_daily_sum[0]}mm<br><img src = "goutte.png"> {precip_hours_daily[0]}h</td>
-    <td style = "text-align: center; ">{precip_daily_sum[1]}mm<br><img src = "goutte.png"> {precip_hours_daily[1]}h</td>
-    <td style = "text-align: center; ">{precip_daily_sum[2]}mm<br><img src = "goutte.png"> {precip_hours_daily[2]}h</td>
-    <td style = "text-align: center; ">{precip_daily_sum[3]}mm<br><img src = "goutte.png"> {precip_hours_daily[3]}h</td>
-    <td style = "text-align: center; ">{precip_daily_sum[4]}mm<br><img src = "goutte.png"> {precip_hours_daily[4]}h</td>
+    <td style = "text-align: center; "><img src = "goutte.svg" width = 25px height= 25px>{precip_daily_sum[0]}mm<br> {precip_hours_daily[0]}h</td>
+    <td style = "text-align: center; "><img src = "goutte.svg" width = 25px height= 25px>{precip_daily_sum[1]}mm<br> {precip_hours_daily[1]}h</td>
+    <td style = "text-align: center; "><img src = "goutte.svg" width = 25px height= 25px>{precip_daily_sum[2]}mm<br> {precip_hours_daily[2]}h</td>
+    <td style = "text-align: center; "><img src = "goutte.svg" width = 25px height= 25px>{precip_daily_sum[3]}mm<br> {precip_hours_daily[3]}h</td>
+    <td style = "text-align: center; "><img src = "goutte.svg" width = 25px height= 25px>{precip_daily_sum[4]}mm<br> {precip_hours_daily[4]}h</td>
   </tr>
   <tr>
     <td style = "text-align: center; ">

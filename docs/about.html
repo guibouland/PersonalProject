@@ -131,102 +131,102 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="bonus" class="level2">
 <h2 class="anchored" data-anchor-id="bonus">Bonus</h2>
-<p>Here’s a table forecasting the 6 following days. However, the data doesn’t come form MeteoFrance but from the general “Weather Forecast” tab in the <a href="https://open-meteo.com/en/docs">website</a>.</p>
+<p>Here’s a table forecasting the 6 following days. However, the data doesn’t come form MeteoFrance but from the general “Weather Forecast” tab in the <a href="https://open-meteo.com/en/docs">website</a>. It’s an old table table made when we tried to bypass the 4-day forecast lenght that MétéoFrance limits us. Thay use slighty different parameters that are not available in the MétéoFrance API.</p>
 <div class="cell" data-execution_count="5">
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="15">
 
 
 <table style="margin: 0 auto;">
   <tbody><tr>
     <th style="background-color: rgb(240, 240, 240);"></th> <!-- Case vide -->
-    <th style="text-align: center;background-color: rgb(240, 240, 240); ">Tuesday 14/11</th>
-    <th style="text-align: center;background-color: rgb(240, 240, 240); ">Wednesday 15/11</th>
     <th style="text-align: center;background-color: rgb(240, 240, 240); ">Thursday 16/11</th>
     <th style="text-align: center;background-color: rgb(240, 240, 240); ">Friday 17/11</th>
     <th style="text-align: center;background-color: rgb(240, 240, 240); ">Saturday 18/11</th>
     <th style="text-align: center;background-color: rgb(240, 240, 240); ">Sunday 19/11</th>
+    <th style="text-align: center;background-color: rgb(240, 240, 240); ">Monday 20/11</th>
+    <th style="text-align: center;background-color: rgb(240, 240, 240); ">Tuesday 21/11</th>
   </tr>
     <tr><td style="text-align: center;"><strong>WMO</strong></td>
-    <td style="background-color: rgb(210,235,242); text-align: center;"><img src="http://openweathermap.org/img/wn/03d@2x.png"><br>Cloudy</td>
-    <td style="background-color: rgb(210,235,242); text-align: center;"><img src="http://openweathermap.org/img/wn/03d@2x.png"><br>Cloudy</td>
     <td style="background-color: rgb(210,235,242); text-align: center;"><img src="http://openweathermap.org/img/wn/10d@2x.png"><br>Light Rain</td>
     <td style="background-color: rgb(210,235,242); text-align: center;"><img src="http://openweathermap.org/img/wn/03d@2x.png"><br>Cloudy</td>
+    <td style="background-color: rgb(210,235,242); text-align: center;"><img src="http://openweathermap.org/img/wn/03d@2x.png"><br>Cloudy</td>
+    <td style="background-color: rgb(210,235,242); text-align: center;"><img src="http://openweathermap.org/img/wn/50d@2x.png"><br>Foggy</td>
     <td style="background-color: rgb(210,235,242); text-align: center;"><img src="http://openweathermap.org/img/wn/03d@2x.png"><br>Cloudy</td>
     <td style="background-color: rgb(210,235,242); text-align: center;"><img src="http://openweathermap.org/img/wn/03d@2x.png"><br>Cloudy</td>
   </tr>
   <tr>
     <td style="text-align: center;"><strong>Temperature</strong></td>
-    <td style="text-align: center;">13.0°C-22.7°C</td>
-    <td style="text-align: center;">7.6°C-18.3°C</td>
-    <td style="text-align: center;">7.4°C-13.1°C</td>
-    <td style="text-align: center;">6.3°C-16.2°C</td>
-    <td style="text-align: center;">5.2°C-15.9°C</td>
-    <td style="text-align: center;">8.2°C-21.6°C</td>
+    <td style="text-align: center;">6.7°C-15.1°C</td>
+    <td style="text-align: center;">9.6°C-16.9°C</td>
+    <td style="text-align: center;">6.1°C-16.2°C</td>
+    <td style="text-align: center;">7.0°C-21.3°C</td>
+    <td style="text-align: center;">11.0°C-17.1°C</td>
+    <td style="text-align: center;">9.3°C-16.0°C</td>
   </tr>
   <tr>
     <td style="text-align: center;"><strong>UV</strong></td>
+    <td style="text-align: center;">2.15</td>
+    <td style="text-align: center;">2.55</td>
     <td style="text-align: center;">2.65</td>
-    <td style="text-align: center;">2.75</td>
-    <td style="text-align: center;">1.35</td>
-    <td style="text-align: center;">2.35</td>
     <td style="text-align: center;">2.65</td>
-    <td style="text-align: center;">2.4</td>
+    <td style="text-align: center;">1.8</td>
+    <td style="text-align: center;">2.45</td>
   </tr>
   <tr>
     <td style="text-align: center;"><strong>Precipitations</strong></td>
-    <td style="text-align: center;">0.0mm<br><img src="goutte.png"> 0%</td>
-    <td style="text-align: center;">0.0mm<br><img src="goutte.png"> 0%</td>
-    <td style="text-align: center;">0.4mm<br><img src="goutte.png"> 55%</td>
-    <td style="text-align: center;">0.0mm<br><img src="goutte.png"> 0%</td>
-    <td style="text-align: center;">0.0mm<br><img src="goutte.png"> 0%</td>
-    <td style="text-align: center;">0.0mm<br><img src="goutte.png"> 0%</td>
+    <td style="text-align: center;">0.8mm<br><img src="goutte.svg" width="25px" height="25px"> 19%</td>
+    <td style="text-align: center;">0.0mm<br><img src="goutte.svg" width="25px" height="25px"> 0%</td>
+    <td style="text-align: center;">0.0mm<br><img src="goutte.svg" width="25px" height="25px"> 0%</td>
+    <td style="text-align: center;">0.0mm<br><img src="goutte.svg" width="25px" height="25px"> 0%</td>
+    <td style="text-align: center;">0.0mm<br><img src="goutte.svg" width="25px" height="25px"> 2%</td>
+    <td style="text-align: center;">0.0mm<br><img src="goutte.svg" width="25px" height="25px"> 6%</td>
   </tr>
   <tr>
     <td style="text-align: center;"><strong>Wind</strong></td>
     <td style="text-align: center; vertical-align: middle; ">
-      6.15km/h
+      7.73km/h
       <br>
-      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate(266deg); display: inline-block; margin: 0 auto;">
+      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate(275deg); display: inline-block; margin: 0 auto;">
         <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
         </div>
       </div>
     </td>
     <td style="text-align: center; vertical-align: middle; ">
-      9.57km/h
+      12.33km/h
       <br>
-      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate(303deg); display: inline-block; margin: 0 auto;">
+      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate(298deg); display: inline-block; margin: 0 auto;">
         <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
         </div>
       </div>
     </td>
     <td style="text-align: center; vertical-align: middle; ">
-      4.85km/h
+      4.22km/h
       <br>
-      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate(277deg); display: inline-block; margin: 0 auto;">
+      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate(327deg); display: inline-block; margin: 0 auto;">
         <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
         </div>
       </div>
     </td>
     <td style="text-align: center; vertical-align: middle; ">
-      13.42km/h
+      7.63km/h
       <br>
-      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate(301deg); display: inline-block; margin: 0 auto;">
+      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate(297deg); display: inline-block; margin: 0 auto;">
         <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
         </div>
       </div>
     </td>
     <td style="text-align: center; vertical-align: middle; ">
-      3.28km/h
+      11.09km/h
       <br>
-      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate(323deg); display: inline-block; margin: 0 auto;">
+      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate(290deg); display: inline-block; margin: 0 auto;">
         <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
         </div>
       </div>
     </td>
     <td style="text-align: center; vertical-align: middle; ">
-      10.37km/h
+      17.03km/h
       <br>
-      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate(293deg); display: inline-block; margin: 0 auto;">
+      <div style="width: 20px; height: 20px; overflow: hidden; transform: rotate(325deg); display: inline-block; margin: 0 auto;">
         <div style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 15px solid black;">
         </div>
       </div>
@@ -234,12 +234,12 @@ ul.task-list li input[type="checkbox"] {
   </tr>
   <tr>
     <td style="text-align: center;"><strong>Sunrise/Sunset</strong></td>
-    <td style="text-align: center;">07:36 - 17:20</td>
-    <td style="text-align: center;">07:38 - 17:19</td>
     <td style="text-align: center;">07:39 - 17:18</td>
     <td style="text-align: center;">07:40 - 17:18</td>
     <td style="text-align: center;">07:41 - 17:17</td>
     <td style="text-align: center;">07:43 - 17:16</td>
+    <td style="text-align: center;">07:44 - 17:15</td>
+    <td style="text-align: center;">07:45 - 17:14</td>
   </tr>
 </tbody></table>
 </div>

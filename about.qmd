@@ -6,7 +6,7 @@ The second table displays, in order, the dates, the weather images and their des
 
 
 ## Bonus
-Here's a table forecasting the 6 following days. However, the data doesn't come form MeteoFrance but from the general "Weather Forecast" tab in the [website](https://open-meteo.com/en/docs).
+Here's a table forecasting the 6 following days. However, the data doesn't come form MeteoFrance but from the general "Weather Forecast" tab in the [website](https://open-meteo.com/en/docs). It's an old table table made when we tried to bypass the 4-day forecast lenght that MétéoFrance limits us. Thay use slighty different parameters that are not available in the MétéoFrance API.
 
 ```{python}
 import pandas as pd
@@ -206,12 +206,12 @@ tabledaily = f"""
   </tr>
   <tr>
     <td style="text-align: center;"><strong>Precipitations</strong></td>
-    <td style="text-align: center;">{precip_daily_sum[0]}mm<br><img src = "goutte.png"> {precip_proba_daily[0]}%</td>
-    <td style="text-align: center;">{precip_daily_sum[1]}mm<br><img src = "goutte.png"> {precip_proba_daily[1]}%</td>
-    <td style="text-align: center;">{precip_daily_sum[2]}mm<br><img src = "goutte.png"> {precip_proba_daily[2]}%</td>
-    <td style="text-align: center;">{precip_daily_sum[3]}mm<br><img src = "goutte.png"> {precip_proba_daily[3]}%</td>
-    <td style="text-align: center;">{precip_daily_sum[4]}mm<br><img src = "goutte.png"> {precip_proba_daily[4]}%</td>
-    <td style="text-align: center;">{precip_daily_sum[5]}mm<br><img src = "goutte.png"> {precip_proba_daily[5]}%</td>
+    <td style="text-align: center;">{precip_daily_sum[0]}mm<br><img src = "goutte.svg" width = 25px height= 25px> {precip_proba_daily[0]}%</td>
+    <td style="text-align: center;">{precip_daily_sum[1]}mm<br><img src = "goutte.svg" width = 25px height= 25px> {precip_proba_daily[1]}%</td>
+    <td style="text-align: center;">{precip_daily_sum[2]}mm<br><img src = "goutte.svg" width = 25px height= 25px> {precip_proba_daily[2]}%</td>
+    <td style="text-align: center;">{precip_daily_sum[3]}mm<br><img src = "goutte.svg" width = 25px height= 25px> {precip_proba_daily[3]}%</td>
+    <td style="text-align: center;">{precip_daily_sum[4]}mm<br><img src = "goutte.svg" width = 25px height= 25px> {precip_proba_daily[4]}%</td>
+    <td style="text-align: center;">{precip_daily_sum[5]}mm<br><img src = "goutte.svg" width = 25px height= 25px> {precip_proba_daily[5]}%</td>
   </tr>
   <tr>
     <td style="text-align: center;"><strong>Wind</strong></td>
